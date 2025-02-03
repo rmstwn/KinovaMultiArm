@@ -153,6 +153,54 @@ src/constants.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/KinovaMultiArm.dir/build.make CMakeFiles/KinovaMultiArm.dir/src/constants.cpp.s
 .PHONY : src/constants.cpp.s
 
+src/fk_vereshchagin.o: src/fk_vereshchagin.cpp.o
+.PHONY : src/fk_vereshchagin.o
+
+# target to build an object file
+src/fk_vereshchagin.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/KinovaMultiArm.dir/build.make CMakeFiles/KinovaMultiArm.dir/src/fk_vereshchagin.cpp.o
+.PHONY : src/fk_vereshchagin.cpp.o
+
+src/fk_vereshchagin.i: src/fk_vereshchagin.cpp.i
+.PHONY : src/fk_vereshchagin.i
+
+# target to preprocess a source file
+src/fk_vereshchagin.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/KinovaMultiArm.dir/build.make CMakeFiles/KinovaMultiArm.dir/src/fk_vereshchagin.cpp.i
+.PHONY : src/fk_vereshchagin.cpp.i
+
+src/fk_vereshchagin.s: src/fk_vereshchagin.cpp.s
+.PHONY : src/fk_vereshchagin.s
+
+# target to generate assembly for a file
+src/fk_vereshchagin.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/KinovaMultiArm.dir/build.make CMakeFiles/KinovaMultiArm.dir/src/fk_vereshchagin.cpp.s
+.PHONY : src/fk_vereshchagin.cpp.s
+
+src/kdl_eigen_conversions.o: src/kdl_eigen_conversions.cpp.o
+.PHONY : src/kdl_eigen_conversions.o
+
+# target to build an object file
+src/kdl_eigen_conversions.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/KinovaMultiArm.dir/build.make CMakeFiles/KinovaMultiArm.dir/src/kdl_eigen_conversions.cpp.o
+.PHONY : src/kdl_eigen_conversions.cpp.o
+
+src/kdl_eigen_conversions.i: src/kdl_eigen_conversions.cpp.i
+.PHONY : src/kdl_eigen_conversions.i
+
+# target to preprocess a source file
+src/kdl_eigen_conversions.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/KinovaMultiArm.dir/build.make CMakeFiles/KinovaMultiArm.dir/src/kdl_eigen_conversions.cpp.i
+.PHONY : src/kdl_eigen_conversions.cpp.i
+
+src/kdl_eigen_conversions.s: src/kdl_eigen_conversions.cpp.s
+.PHONY : src/kdl_eigen_conversions.s
+
+# target to generate assembly for a file
+src/kdl_eigen_conversions.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/KinovaMultiArm.dir/build.make CMakeFiles/KinovaMultiArm.dir/src/kdl_eigen_conversions.cpp.s
+.PHONY : src/kdl_eigen_conversions.cpp.s
+
 src/kinova_manager.o: src/kinova_manager.cpp.o
 .PHONY : src/kinova_manager.o
 
@@ -213,6 +261,12 @@ help:
 	@echo "... src/constants.o"
 	@echo "... src/constants.i"
 	@echo "... src/constants.s"
+	@echo "... src/fk_vereshchagin.o"
+	@echo "... src/fk_vereshchagin.i"
+	@echo "... src/fk_vereshchagin.s"
+	@echo "... src/kdl_eigen_conversions.o"
+	@echo "... src/kdl_eigen_conversions.i"
+	@echo "... src/kdl_eigen_conversions.s"
 	@echo "... src/kinova_manager.o"
 	@echo "... src/kinova_manager.i"
 	@echo "... src/kinova_manager.s"

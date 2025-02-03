@@ -16,5 +16,17 @@
   "command": "/usr/bin/c++ -DBOOST_ATOMIC_DYN_LINK -DBOOST_ATOMIC_NO_LIB -DBOOST_FILESYSTEM_DYN_LINK -DBOOST_FILESYSTEM_NO_LIB -DBOOST_SYSTEM_DYN_LINK -DBOOST_SYSTEM_NO_LIB -D_OS_UNIX -I/home/rama/Documents/cpp/KinovaMultiArm/kortex/include -I/home/rama/Documents/cpp/KinovaMultiArm/kortex/include/client -I/home/rama/Documents/cpp/KinovaMultiArm/kortex/include/client_stubs -I/home/rama/Documents/cpp/KinovaMultiArm/kortex/include/common -I/home/rama/Documents/cpp/KinovaMultiArm/kortex/include/google -I/home/rama/Documents/cpp/KinovaMultiArm/kortex/include/messages -I/home/rama/Documents/cpp/KinovaMultiArm/thirdParty/cxxopts -I/home/rama/Documents/cpp/KinovaMultiArm/include -I/usr/include/eigen3 -g -std=gnu++17 -o CMakeFiles/KinovaMultiArm.dir/src/kinova_manager.cpp.o -c /home/rama/Documents/cpp/KinovaMultiArm/src/kinova_manager.cpp",
   "file": "/home/rama/Documents/cpp/KinovaMultiArm/src/kinova_manager.cpp",
   "output": "CMakeFiles/KinovaMultiArm.dir/src/kinova_manager.cpp.o"
+},
+{
+  "directory": "/home/rama/Documents/cpp/KinovaMultiArm/build",
+  "command": "/usr/bin/c++ -DBOOST_ATOMIC_DYN_LINK -DBOOST_ATOMIC_NO_LIB -DBOOST_FILESYSTEM_DYN_LINK -DBOOST_FILESYSTEM_NO_LIB -DBOOST_SYSTEM_DYN_LINK -DBOOST_SYSTEM_NO_LIB -D_OS_UNIX -I/home/rama/Documents/cpp/KinovaMultiArm/kortex/include -I/home/rama/Documents/cpp/KinovaMultiArm/kortex/include/client -I/home/rama/Documents/cpp/KinovaMultiArm/kortex/include/client_stubs -I/home/rama/Documents/cpp/KinovaMultiArm/kortex/include/common -I/home/rama/Documents/cpp/KinovaMultiArm/kortex/include/google -I/home/rama/Documents/cpp/KinovaMultiArm/kortex/include/messages -I/home/rama/Documents/cpp/KinovaMultiArm/thirdParty/cxxopts -I/home/rama/Documents/cpp/KinovaMultiArm/include -I/usr/include/eigen3 -g -std=gnu++17 -o CMakeFiles/KinovaMultiArm.dir/src/fk_vereshchagin.cpp.o -c /home/rama/Documents/cpp/KinovaMultiArm/src/fk_vereshchagin.cpp",
+  "file": "/home/rama/Documents/cpp/KinovaMultiArm/src/fk_vereshchagin.cpp",
+  "output": "CMakeFiles/KinovaMultiArm.dir/src/fk_vereshchagin.cpp.o"
+},
+{
+  "directory": "/home/rama/Documents/cpp/KinovaMultiArm/build",
+  "command": "/usr/bin/c++ -DBOOST_ATOMIC_DYN_LINK -DBOOST_ATOMIC_NO_LIB -DBOOST_FILESYSTEM_DYN_LINK -DBOOST_FILESYSTEM_NO_LIB -DBOOST_SYSTEM_DYN_LINK -DBOOST_SYSTEM_NO_LIB -D_OS_UNIX -I/home/rama/Documents/cpp/KinovaMultiArm/kortex/include -I/home/rama/Documents/cpp/KinovaMultiArm/kortex/include/client -I/home/rama/Documents/cpp/KinovaMultiArm/kortex/include/client_stubs -I/home/rama/Documents/cpp/KinovaMultiArm/kortex/include/common -I/home/rama/Documents/cpp/KinovaMultiArm/kortex/include/google -I/home/rama/Documents/cpp/KinovaMultiArm/kortex/include/messages -I/home/rama/Documents/cpp/KinovaMultiArm/thirdParty/cxxopts -I/home/rama/Documents/cpp/KinovaMultiArm/include -I/usr/include/eigen3 -g -std=gnu++17 -o CMakeFiles/KinovaMultiArm.dir/src/kdl_eigen_conversions.cpp.o -c /home/rama/Documents/cpp/KinovaMultiArm/src/kdl_eigen_conversions.cpp",
+  "file": "/home/rama/Documents/cpp/KinovaMultiArm/src/kdl_eigen_conversions.cpp",
+  "output": "CMakeFiles/KinovaMultiArm.dir/src/kdl_eigen_conversions.cpp.o"
 }
 ]

@@ -1,6 +1,10 @@
 file(REMOVE_RECURSE
   "CMakeFiles/KinovaMultiArm.dir/src/constants.cpp.o"
   "CMakeFiles/KinovaMultiArm.dir/src/constants.cpp.o.d"
+  "CMakeFiles/KinovaMultiArm.dir/src/fk_vereshchagin.cpp.o"
+  "CMakeFiles/KinovaMultiArm.dir/src/fk_vereshchagin.cpp.o.d"
+  "CMakeFiles/KinovaMultiArm.dir/src/kdl_eigen_conversions.cpp.o"
+  "CMakeFiles/KinovaMultiArm.dir/src/kdl_eigen_conversions.cpp.o.d"
   "CMakeFiles/KinovaMultiArm.dir/src/kinova_manager.cpp.o"
   "CMakeFiles/KinovaMultiArm.dir/src/kinova_manager.cpp.o.d"
   "CMakeFiles/KinovaMultiArm.dir/src/main.cpp.o"

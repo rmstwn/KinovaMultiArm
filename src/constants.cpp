@@ -32,7 +32,7 @@ namespace kinova_constants
    const std::string ID("kinova_gen3_lite_arm");
 
    // Number of joints in the manipulator
-   const int NUMBER_OF_JOINTS(7);
+   const int NUMBER_OF_JOINTS(6);
    const int NUMBER_OF_SEGMENTS(7);
    const int NUMBER_OF_FRAMES(8);
 

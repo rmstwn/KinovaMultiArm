@@ -47,19 +47,17 @@ enum robot_id
 	KINOVA_GEN3_lITE_2 = 3
 };
 
-class robot_mediator
+class robot_manager
 {
 	public:
 		// virtual ~robot_mediator() = 0;
 
 		virtual bool is_initialized() = 0;
 		virtual int get_robot_ID() = 0;
-		virtual int get_robot_environment() = 0;
+		// virtual int get_robot_environment() = 0;
 
 		// Initializes variables and calibrates the manipulator
-		virtual void initialize(const int robot_model,
-								const int robot_environment,
-								const int id,
+		virtual void initialize(const int id,
                                 const double DT_SEC) = 0;
 
 		// Update joint space state: measured positions, velocities and torques
@@ -84,7 +82,7 @@ class robot_mediator
 		// Set joint velocity command
 		virtual int set_joint_velocities(const KDL::JntArray &joint_velocities) = 0;
 		// Set joint torque command
-		virtual int set_joint_torques(const KDL::JntArray &joint_torques) = 0; 
+		// virtual int set_joint_torques(const KDL::JntArray &joint_torques) = 0; 
 		// Set Zero Joint Velocities and wait until robot has stopped completely
 		virtual int stop_robot_motion() = 0;
 
@@ -95,12 +93,12 @@ class robot_mediator
 		virtual std::vector<double> get_joint_acceleration_limits() = 0;
 		virtual std::vector<double> get_joint_torque_limits() = 0;
 		virtual std::vector<double> get_joint_stopping_torque_limits() = 0;
-		virtual std::vector<double> get_joint_inertia() = 0;
+		// virtual std::vector<double> get_joint_inertia() = 0;
 		virtual std::vector<double> get_joint_offsets() = 0;
 		
 		virtual KDL::Twist get_root_acceleration() = 0;
-		virtual KDL::Chain get_robot_model() = 0;
-		virtual KDL::Chain get_full_robot_model() = 0;
+		// virtual KDL::Chain get_robot_model() = 0;
+		// virtual KDL::Chain get_full_robot_model() = 0;
 
 	private:
 		// Get current joint positions
@@ -108,8 +106,8 @@ class robot_mediator
 		// Get current joint velocities 
 		virtual void get_joint_velocities(KDL::JntArray &joint_velocities) = 0;
 		// Get current joint torques
-		virtual void get_joint_torques(KDL::JntArray &joint_torques) = 0;
+		// virtual void get_joint_torques(KDL::JntArray &joint_torques) = 0;
 		// Get measured / estimated external forces acting on the end-effector
-		virtual void get_end_effector_wrench(KDL::Wrench &end_effector_wrench) = 0;
+		// virtual void get_end_effector_wrench(KDL::Wrench &end_effector_wrench) = 0;
 };
 #endif /* ROBOT_MANAGER_HPP */

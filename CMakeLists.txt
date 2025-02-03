@@ -68,6 +68,8 @@ add_executable(KinovaMultiArm
     src/main.cpp
     src/constants.cpp
     src/kinova_manager.cpp
+    src/fk_vereshchagin.cpp
+    src/kdl_eigen_conversions.cpp
 )
 
 # Link against the Kinova Kortex API library
