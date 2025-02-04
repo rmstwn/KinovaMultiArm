@@ -78,7 +78,11 @@ enum desired_pose
     PACKAGING = 3,
     HOME_FORWARD = 4,
     HOME_BACK = 5,
-    APPROACH_TABLE = 6
+    APPROACH_TABLE = 6,
+    TEST = 7,
+    BOTTLE_1 = 10,
+    BOTTLE_2 = 11,
+    BOTTLE_3 = 12,
 };
 
 enum path_types
@@ -105,19 +109,19 @@ int desired_control_mode = control_mode::POSITION;
 // Create an event listener that will set the promise action event to the exit value
 // Will set promise to either END or ABORT
 // Use finish_promise.get_future.get() to wait and get the value
-std::function<void(Kinova::Api::Base::ActionNotification)> create_event_listener_by_promise(std::promise<Kinova::Api::Base::ActionEvent>& finish_promise)
+std::function<void(Kinova::Api::Base::ActionNotification)> create_event_listener_by_promise(std::promise<Kinova::Api::Base::ActionEvent> &finish_promise)
 {
-    return [&finish_promise] (Kinova::Api::Base::ActionNotification notification)
+    return [&finish_promise](Kinova::Api::Base::ActionNotification notification)
     {
         const auto action_event = notification.action_event();
-        switch(action_event)
+        switch (action_event)
         {
-            case Kinova::Api::Base::ActionEvent::ACTION_END:
-            case Kinova::Api::Base::ActionEvent::ACTION_ABORT:
-                finish_promise.set_value(action_event);
-                break;
-            default:
-                break;
+        case Kinova::Api::Base::ActionEvent::ACTION_END:
+        case Kinova::Api::Base::ActionEvent::ACTION_ABORT:
+            finish_promise.set_value(action_event);
+            break;
+        default:
+            break;
         }
     };
 }
@@ -129,7 +133,8 @@ auto lambda_fct_callback = [](const Kinova::Api::Error &err, const Kinova::Api::
     // avoid this in a real-time loop
     std::string serialized_data;
     google::protobuf::util::MessageToJsonString(data.actuators(6), &serialized_data);
-    std::cout << serialized_data << std::endl << std::endl;
+    std::cout << serialized_data << std::endl
+              << std::endl;
 };
 
 int go_to(kinova_manager &robot_driver_1, kinova_manager &robot_driver_2, const int desired_pose_)
@@ -162,6 +167,7 @@ int go_to(kinova_manager &robot_driver_1, kinova_manager &robot_driver_2, const 
     auto error_callback = [](Kinova::Api::KError err)
     { cout << "_________ callback error _________" << err.toString(); };
 
+    //////////////////////////////////////////////////////////////////////
     // Kinova 1 Create API objects
     auto transport_1 = new Kinova::Api::TransportClientTcp();
     auto router_1 = new Kinova::Api::RouterClient(transport_1, error_callback);
@@ -177,7 +183,9 @@ int go_to(kinova_manager &robot_driver_1, kinova_manager &robot_driver_2, const 
     session_manager_1->CreateSession(create_session_info_1);
     // Create services
     auto base_1 = new Kinova::Api::Base::BaseClient(router_1);
+    //////////////////////////////////////////////////////////////////////
 
+    //////////////////////////////////////////////////////////////////////
     // Kinova 2 Create API objects
     auto transport_2 = new Kinova::Api::TransportClientTcp();
     auto router_2 = new Kinova::Api::RouterClient(transport_2, error_callback);
@@ -194,6 +202,7 @@ int go_to(kinova_manager &robot_driver_1, kinova_manager &robot_driver_2, const 
     session_manager_2->CreateSession(create_session_info_2);
     // Create services
     auto base_2 = new Kinova::Api::Base::BaseClient(router_2);
+    //////////////////////////////////////////////////////////////////////
 
     // Make sure the arm is in Single Level Servoing before executing an Action
     auto servoingMode = Kinova::Api::Base::ServoingModeInformation();
@@ -309,16 +318,288 @@ int go_to(kinova_manager &robot_driver_1, kinova_manager &robot_driver_2, const 
     return 0;
 }
 
+int go_to_cart(kinova_manager &robot_driver_1, kinova_manager &robot_driver_2, const int desired_pose_)
+{
+    std::vector<double> desired_ee_pose_1(6, 0.0);
+    std::vector<double> desired_ee_pose_2(6, 0.0);
+
+    switch (desired_pose_) // Angle value are in units of degree
+    {
+    case desired_pose::CANDLE:
+        desired_ee_pose_1 = std::vector<double>{0.057, -0.01, 1.0003, // Linear: Vector
+                                                0.0, 0.0, 90.0};      // Angilar: Vector
+        desired_ee_pose_2 = std::vector<double>{0.057, -0.01, 1.0003, // Linear: Vector
+                                                0.0, 0.0, 90.0};      // Angilar: Vector
+        break;
+    case desired_pose::HOME:
+        desired_ee_pose_1 = std::vector<double>{0.438, -0.195, 0.449, // Linear: Vector
+                                                90.0, 0.0, 30.0};     // Angilar: Vector
+        desired_ee_pose_2 = std::vector<double>{0.438, -0.195, 0.449, // Linear: Vector
+                                                90.0, 0.0, 30.0};     // Angilar: Vector
+        break;
+
+    case desired_pose::TEST:
+        desired_ee_pose_1 = std::vector<double>{0.0, -0.5, 0.427, // Linear: Vector
+                                                85.0, 0.0, 54.0}; // Angilar: Vector
+        desired_ee_pose_2 = std::vector<double>{0.0, -0.5, 0.427, // Linear: Vector
+                                                85.0, 0.0, 54.0}; // Angilar: Vector
+        break;
+
+    case desired_pose::BOTTLE_1:
+        desired_ee_pose_1 = std::vector<double>{0.0, -0.5, 0.427,      // Linear: Vector
+                                                85.0, 0.0, 54.0};      // Angilar: Vector
+        desired_ee_pose_2 = std::vector<double>{0.2, 0.75, 0.311,   // Linear: Vector
+                                                117.0, -98.0, 87.0}; // Angilar: Vector
+        break;
+
+    default:
+        return -1;
+    }
+
+    auto error_callback = [](Kinova::Api::KError err)
+    { cout << "_________ callback error _________" << err.toString(); };
+
+    //////////////////////////////////////////////////////////////////////
+
+    // Kinova 1 Create API objects
+    auto transport_1 = new Kinova::Api::TransportClientTcp();
+    auto router_1 = new Kinova::Api::RouterClient(transport_1, error_callback);
+    transport_1->connect(IP_ADDRESS_1, PORT);
+    // Set session data connection information
+    auto create_session_info_1 = Kinova::Api::Session::CreateSessionInfo();
+    create_session_info_1.set_username("admin");
+    create_session_info_1.set_password("admin");
+    create_session_info_1.set_session_inactivity_timeout(200);    // (milliseconds)
+    create_session_info_1.set_connection_inactivity_timeout(200); // (milliseconds)
+    // Session manager service wrapper
+    auto session_manager_1 = new Kinova::Api::SessionManager(router_1);
+    session_manager_1->CreateSession(create_session_info_1);
+    // Create services
+    auto base_1 = new Kinova::Api::Base::BaseClient(router_1);
+    auto base_cyclic_1 = new Kinova::Api::BaseCyclic::BaseCyclicClient(router_1);
+
+    //////////////////////////////////////////////////////////////////////
+
+    //////////////////////////////////////////////////////////////////////
+
+    // Kinova 2 Create API objects
+    auto transport_2 = new Kinova::Api::TransportClientTcp();
+    auto router_2 = new Kinova::Api::RouterClient(transport_2, error_callback);
+    transport_2->connect(IP_ADDRESS_2, PORT);
+
+    // Set session data connection information
+    auto create_session_info_2 = Kinova::Api::Session::CreateSessionInfo();
+    create_session_info_2.set_username("admin");
+    create_session_info_2.set_password("admin");
+    create_session_info_2.set_session_inactivity_timeout(200);    // (milliseconds)
+    create_session_info_2.set_connection_inactivity_timeout(200); // (milliseconds)
+    // Session manager service wrapper
+    auto session_manager_2 = new Kinova::Api::SessionManager(router_2);
+    session_manager_2->CreateSession(create_session_info_2);
+    // Create services
+    auto base_2 = new Kinova::Api::Base::BaseClient(router_2);
+    auto base_cyclic_2 = new Kinova::Api::BaseCyclic::BaseCyclicClient(router_2);
+
+    //////////////////////////////////////////////////////////////////////
+
+    // Make sure the arm is in Single Level Servoing before executing an Action
+    auto servoingMode = Kinova::Api::Base::ServoingModeInformation();
+    servoingMode.set_servoing_mode(Kinova::Api::Base::ServoingMode::SINGLE_LEVEL_SERVOING);
+    base_1->SetServoingMode(servoingMode);
+    base_2->SetServoingMode(servoingMode);
+    std::this_thread::sleep_for(std::chrono::milliseconds(500));
+
+    // auto constrained_joint_angles = Kinova::Api::Base::ConstrainedJointAngles();
+    // auto joint_angles = constrained_joint_angles.mutable_joint_angles();
+    // auto actuator_count = base_1->GetActuatorCount();
+
+    std::cout << "Starting Cartesian action movement ..." << std::endl;
+
+    auto feedback_1 = base_cyclic_1->RefreshFeedback();
+    auto action_1 = Kinova::Api::Base::Action();
+    action_1.set_name("Kinova 1 Cartesian action movement");
+    action_1.set_application_data("");
+
+    auto constrained_pose_1 = action_1.mutable_reach_pose();
+    auto pose_1 = constrained_pose_1->mutable_target_pose();
+    pose_1->set_x(desired_ee_pose_1[0]);       // x (meters)
+    pose_1->set_y(desired_ee_pose_1[1]);       // y (meters)
+    pose_1->set_z(desired_ee_pose_1[2]);       // z (meters)
+    pose_1->set_theta_x(desired_ee_pose_1[3]); // theta x (degrees)
+    pose_1->set_theta_y(desired_ee_pose_1[4]); // theta y (degrees)
+    pose_1->set_theta_z(desired_ee_pose_1[5]); // theta z (degrees)
+
+    //////////////////////////////////////////////////////////////////////
+
+    auto feedback_2 = base_cyclic_2->RefreshFeedback();
+    auto action_2 = Kinova::Api::Base::Action();
+    action_2.set_name("Kinova 2 Cartesian action movement");
+    action_2.set_application_data("");
+
+    // auto constrained_pose_2 = action_2.mutable_reach_pose();
+    // auto pose_2 = constrained_pose_2->mutable_target_pose();
+    // pose_2->set_x(desired_ee_pose_2[0]);                  // x (meters)
+    // pose_2->set_y((desired_ee_pose_2[1] + 0.06) * -1);    // y (meters)
+    // pose_2->set_z(desired_ee_pose_2[2] + 0.05);           // z (meters)
+    // pose_2->set_theta_x(desired_ee_pose_2[3]);            // theta x (degrees)
+    // pose_2->set_theta_y(desired_ee_pose_2[4]);            // theta y (degrees)
+    // pose_2->set_theta_z(abs(desired_ee_pose_2[5] - 180)); // theta z (degrees)
+
+    auto constrained_pose_2 = action_2.mutable_reach_pose();
+    auto pose_2 = constrained_pose_2->mutable_target_pose();
+    pose_2->set_x(desired_ee_pose_2[0]);            // x (meters)
+    pose_2->set_y(desired_ee_pose_2[1]);            // y (meters)
+    pose_2->set_z(desired_ee_pose_2[2]);            // z (meters)
+    pose_2->set_theta_x(desired_ee_pose_2[3]);      // theta x (degrees)
+    pose_2->set_theta_y(desired_ee_pose_2[4]);      // theta y (degrees)
+    pose_2->set_theta_z(abs(desired_ee_pose_2[5])); // theta z (degrees)
+
+    //////////////////////////////////////////////////////////////////////
+
+    // Connect to notification action topic (Promise alternative)
+    // See cartesian examples for Reference alternative
+    std::promise<Kinova::Api::Base::ActionEvent> finish_promise_1;
+    auto finish_future_1 = finish_promise_1.get_future();
+    auto promise_notification_handle_1 = base_1->OnNotificationActionTopic(
+        create_event_listener_by_promise(finish_promise_1),
+        Kinova::Api::Common::NotificationOptions());
+    std::promise<Kinova::Api::Base::ActionEvent> finish_promise_2;
+    auto finish_future_2 = finish_promise_2.get_future();
+    auto promise_notification_handle_2 = base_2->OnNotificationActionTopic(
+        create_event_listener_by_promise(finish_promise_2),
+        Kinova::Api::Common::NotificationOptions());
+
+    // // std::cout << "Reaching joint angles..." << std::endl;
+    // base_1->PlayJointTrajectory(constrained_joint_angles);
+    // base_2->PlayJointTrajectory(constrained_joint_angles);
+
+    base_1->ExecuteAction(action_1);
+    base_2->ExecuteAction(action_2);
+
+    // Wait for future value from promise (Promise alternative)
+    // See cartesian examples for Reference alternative
+    const auto status_1 = finish_future_1.wait_for(TIMEOUT_DURATION);
+    const auto status_2 = finish_future_2.wait_for(TIMEOUT_DURATION);
+    base_1->Unsubscribe(promise_notification_handle_1);
+    base_2->Unsubscribe(promise_notification_handle_2);
+
+    if (status_1 != std::future_status::ready)
+    {
+        std::cout << "Timeout on action notification wait" << std::endl;
+        std::cout << "Can't reach safe position, exiting" << std::endl;
+
+        // Close API session
+        session_manager_1->CloseSession();
+
+        // Deactivate the router and cleanly disconnect from the transport object
+        router_1->SetActivationStatus(false);
+        transport_1->disconnect();
+
+        // Destroy the API
+        delete base_1;
+        delete base_cyclic_1;
+        delete session_manager_1;
+        delete router_1;
+        delete transport_1;
+        return -1;
+    }
+
+    if (status_2 != std::future_status::ready)
+    {
+        std::cout << "Timeout on action notification wait" << std::endl;
+        std::cout << "Can't reach safe position, exiting" << std::endl;
+
+        // Close API session
+        session_manager_2->CloseSession();
+
+        // Deactivate the router and cleanly disconnect from the transport object
+        router_2->SetActivationStatus(false);
+        transport_2->disconnect();
+
+        // Destroy the API
+        delete base_2;
+        delete base_cyclic_2;
+        delete session_manager_2;
+        delete router_2;
+        delete transport_2;
+        return -1;
+    }
+
+    // const auto promise_event_1 = finish_future_1.get();
+    // const auto promise_event_2 = finish_future_2.get();
+
+    // std::cout << "Joint angles reached" << std::endl;
+    // std::cout << "Promise value : " << Kinova::Api::Base::ActionEvent_Name(promise_event) << std::endl;
+
+    // Close API session
+    session_manager_1->CloseSession();
+    session_manager_2->CloseSession();
+
+    // Deactivate the router and cleanly disconnect from the transport object
+    router_1->SetActivationStatus(false);
+    router_2->SetActivationStatus(false);
+
+    transport_1->disconnect();
+    transport_2->disconnect();
+
+    // Destroy the API
+    delete base_1;
+    delete base_2;
+    delete session_manager_1;
+    delete session_manager_2;
+    delete router_1;
+    delete router_2;
+    delete transport_1;
+    delete transport_2;
+
+    // printf("High-Level Control Completed\n");
+
+    return 0;
+}
+
 int main(int argc, char **argv)
 {
     RATE_HZ = 700; // Hz
 
+    desired_pose_id = desired_pose::HOME;
+    desired_control_mode = control_mode::POSITION;
+
     kinova_manager robot_driver_1;
     kinova_manager robot_driver_2;
 
-    int return_flag = go_to(robot_driver_1, robot_driver_2, desired_pose_id);
+    int return_flag = 0;
+
+    return_flag = go_to(robot_driver_1, robot_driver_2, desired_pose_id);
     if (return_flag != 0)
         return 0;
+
+    return_flag = go_to_cart(robot_driver_1, robot_driver_2, desired_pose::BOTTLE_1);
+    if (return_flag != 0)
+        return 0;
+
+    // return_flag = go_to(robot_driver_1, robot_driver_2, desired_pose_id);
+    // if (return_flag != 0)
+    //     return 0;
+
+    // // Extract robot model and if not simulation, establish connection with motor drivers
+    // if (!robot_driver_1.is_initialized())
+    //     robot_driver_1.initialize(robot_id::KINOVA_GEN3_lITE_1, 1.0 / static_cast<double>(RATE_HZ));
+    // if (!robot_driver_1.is_initialized())
+    // {
+    //     printf("Robot 1 is not initialized\n");
+    //     return 0;
+    // }
+
+    // if (!robot_driver_2.is_initialized())
+    //     robot_driver_2.initialize(robot_id::KINOVA_GEN3_lITE_2, 1.0 / static_cast<double>(RATE_HZ));
+    // if (!robot_driver_2.is_initialized())
+    // {
+    //     printf("Robot 2 is not initialized\n");
+    //     return 0;
+    // }
+
+    // robot_driver_1.deinitialize();
+    // robot_driver_2.deinitialize();
 
     std::cout << "Kinova Multi-Arm Project Initialized!" << std::endl;
     return 0;

@@ -27,12 +27,12 @@ SOFTWARE.
 #include "kinova_manager.hpp"
 
 #define IP_ADDRESS_1 "192.168.2.10"
-#define IP_ADDRESS_2 "192.168.2.12"
+#define IP_ADDRESS_2 "192.168.2.11"
 #define PORT 10000
 #define PORT_REAL_TIME 10001
 #define ACTUATOR_COUNT 6
 #define SEGMENT_COUNT_FULL 8
-#define NUM_OF_CONSTRAINTS 6
+#define NUM_OF_CONSTRAINTS 5
 
 kinova_manager::kinova_manager() : is_initialized_(false), kinova_id(robot_id::KINOVA_GEN3_lITE_1),
                                    control_mode_(control_mode::STOP_MOTION),
@@ -249,10 +249,10 @@ int kinova_manager::set_joint_command(const KDL::JntArray &joint_positions,
 
     switch (desired_control_mode)
     {
-    // case control_mode::TORQUE:
-    //     if (control_mode_ != control_mode::TORQUE)
-    //         set_control_mode(desired_control_mode);
-    //     return set_joint_torques(joint_torques);
+        // case control_mode::TORQUE:
+        //     if (control_mode_ != control_mode::TORQUE)
+        //         set_control_mode(desired_control_mode);
+        //     return set_joint_torques(joint_torques);
 
     case control_mode::VELOCITY:
         if (control_mode_ != control_mode::VELOCITY)
@@ -389,20 +389,21 @@ std::vector<double> kinova_manager::get_joint_offsets()
 
 KDL::Twist kinova_manager::get_root_acceleration()
 {
-    if (kinova_id == robot_id::KINOVA_GEN3_lITE_1) return KDL::Twist(KDL::Vector(kinova_constants::root_acceleration_1[0],
-                                                                            kinova_constants::root_acceleration_1[1],
-                                                                            kinova_constants::root_acceleration_1[2]),
-                                                                KDL::Vector(kinova_constants::root_acceleration_1[3],
-                                                                            kinova_constants::root_acceleration_1[4],
-                                                                            kinova_constants::root_acceleration_1[5]));
-    else return KDL::Twist(KDL::Vector(kinova_constants::root_acceleration_2[0],
-                                       kinova_constants::root_acceleration_2[1],
-                                       kinova_constants::root_acceleration_2[2]),
-                           KDL::Vector(kinova_constants::root_acceleration_2[3],
-                                       kinova_constants::root_acceleration_2[4],
-                                       kinova_constants::root_acceleration_2[5]));
+    if (kinova_id == robot_id::KINOVA_GEN3_lITE_1)
+        return KDL::Twist(KDL::Vector(kinova_constants::root_acceleration_1[0],
+                                      kinova_constants::root_acceleration_1[1],
+                                      kinova_constants::root_acceleration_1[2]),
+                          KDL::Vector(kinova_constants::root_acceleration_1[3],
+                                      kinova_constants::root_acceleration_1[4],
+                                      kinova_constants::root_acceleration_1[5]));
+    else
+        return KDL::Twist(KDL::Vector(kinova_constants::root_acceleration_2[0],
+                                      kinova_constants::root_acceleration_2[1],
+                                      kinova_constants::root_acceleration_2[2]),
+                          KDL::Vector(kinova_constants::root_acceleration_2[3],
+                                      kinova_constants::root_acceleration_2[4],
+                                      kinova_constants::root_acceleration_2[5]));
 }
-
 
 int kinova_manager::get_robot_ID()
 {
@@ -414,38 +415,42 @@ bool kinova_manager::is_initialized()
     return is_initialized_;
 }
 
-// Initialize variables and calibrate the manipulator: 
+// Initialize variables and calibrate the manipulator:
 void kinova_manager::initialize(const int id,
-                                 const double DT_SEC)
+                                const double DT_SEC)
 {
-    kinova_id           = id;
-    DT_SEC_             = DT_SEC;
-    kinova_chain_       = KDL::Chain();
+    kinova_id = id;
+    DT_SEC_ = DT_SEC;
+    kinova_chain_ = KDL::Chain();
 
     // Reset Flags
-    is_initialized_   = false;
-    add_offsets_      = false;
-    int parser_result = 0;
+    is_initialized_ = false;
+    add_offsets_ = false;
 
     // If the real robot is controlled, settup the connection
     // Create API error-callback and objects
     // Connect all ports for real control
-    auto error_callback = [](Kinova::Api::KError err){ cout << "_________ callback error _________" << err.toString(); };
+    auto error_callback = [](Kinova::Api::KError err)
+    { cout << "_________ callback error _________" << err.toString(); };
     this->transport_ = std::make_shared<Kinova::Api::TransportClientTcp>();
     this->router_ = std::make_shared<Kinova::Api::RouterClient>(transport_.get(), error_callback);
-    if (kinova_id == KINOVA_GEN3_lITE_1) transport_->connect(IP_ADDRESS_1, PORT);
-    else transport_->connect(IP_ADDRESS_2, PORT);
+    if (kinova_id == KINOVA_GEN3_lITE_1)
+        transport_->connect(IP_ADDRESS_1, PORT);
+    else
+        transport_->connect(IP_ADDRESS_2, PORT);
 
     this->transport_real_time_ = std::make_shared<Kinova::Api::TransportClientUdp>();
     this->router_real_time_ = std::make_shared<Kinova::Api::RouterClient>(transport_real_time_.get(), error_callback);
-    if (kinova_id == KINOVA_GEN3_lITE_1) transport_real_time_->connect(IP_ADDRESS_1, PORT_REAL_TIME);
-    else transport_real_time_->connect(IP_ADDRESS_2, PORT_REAL_TIME);
+    if (kinova_id == KINOVA_GEN3_lITE_1)
+        transport_real_time_->connect(IP_ADDRESS_1, PORT_REAL_TIME);
+    else
+        transport_real_time_->connect(IP_ADDRESS_2, PORT_REAL_TIME);
 
     // Set session data connection information
     auto create_session_info = Kinova::Api::Session::CreateSessionInfo();
     create_session_info.set_username("admin");
     create_session_info.set_password("admin");
-    create_session_info.set_session_inactivity_timeout(200);   // (milliseconds)
+    create_session_info.set_session_inactivity_timeout(200);    // (milliseconds)
     create_session_info.set_connection_inactivity_timeout(200); // (milliseconds)
 
     // Session manager service wrapper
@@ -457,17 +462,17 @@ void kinova_manager::initialize(const int id,
 
     // Create services
     this->base_ = std::make_shared<Kinova::Api::Base::BaseClient>(router_.get());
-    this->base_cyclic_ = std::make_shared< Kinova::Api::BaseCyclic::BaseCyclicClient>(router_real_time_.get());
-    this->actuator_config_ = std::make_shared< Kinova::Api::ActuatorConfig::ActuatorConfigClient>(router_.get());
+    this->base_cyclic_ = std::make_shared<Kinova::Api::BaseCyclic::BaseCyclicClient>(router_real_time_.get());
+    this->actuator_config_ = std::make_shared<Kinova::Api::ActuatorConfig::ActuatorConfigClient>(router_.get());
 
-    // std::cout << "Kinova sessions created" << std::endl;
+    std::cout << "Kinova sessions created" << std::endl;
 
     // Clearing faults
     try
     {
         base_->ClearFaults();
     }
-    catch(...)
+    catch (...)
     {
         std::cout << "Unable to clear robot faults" << std::endl;
         return;
@@ -495,7 +500,7 @@ void kinova_manager::initialize(const int id,
 
         std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     }
-    catch (Kinova::Api::KDetailedException& ex)
+    catch (Kinova::Api::KDetailedException &ex)
     {
         std::cout << "API error: " << ex.what() << std::endl;
 
@@ -504,18 +509,18 @@ void kinova_manager::initialize(const int id,
         std::cout << "KError sub_string: " << ex.getErrorInfo().getError().error_sub_string() << std::endl;
 
         // Error codes by themselves are not very verbose if you don't see their corresponding enum value
-        // You can use google::protobuf helpers to get the string enum element for every error code and sub-code 
+        // You can use google::protobuf helpers to get the string enum element for every error code and sub-code
         std::cout << "Error code string equivalent: " << Kinova::Api::ErrorCodes_Name(Kinova::Api::ErrorCodes(ex.getErrorInfo().getError().error_code())) << std::endl;
         std::cout << "Error sub-code string equivalent: " << Kinova::Api::SubErrorCodes_Name(Kinova::Api::SubErrorCodes(ex.getErrorInfo().getError().error_sub_code())) << std::endl;
 
         return;
     }
-    catch (std::runtime_error& ex2)
+    catch (std::runtime_error &ex2)
     {
         std::cout << "Run-time Error: " << ex2.what() << std::endl;
         return;
     }
-    catch(...)
+    catch (...)
     {
         std::cout << "Unknown error" << std::endl;
         return;
@@ -524,8 +529,10 @@ void kinova_manager::initialize(const int id,
     // Set connection flag
     connection_established_ = true;
 
-    if (!connection_established_)  printf("Cannot create Kinova model! \n");
-    else is_initialized_ = true; // Set initialization flag for the user
+    if (!connection_established_)
+        printf("Cannot create Kinova model! \n");
+    else
+        is_initialized_ = true; // Set initialization flag for the user
 }
 
 void kinova_manager::deinitialize()
@@ -542,7 +549,7 @@ void kinova_manager::deinitialize()
     transport_->disconnect();
     router_real_time_->SetActivationStatus(false);
     transport_real_time_->disconnect();
-    
+
     is_initialized_ = false;
     printf("Robot deinitialized! \n\n\n");
 }
