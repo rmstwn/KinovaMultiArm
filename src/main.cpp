@@ -584,7 +584,7 @@ int go_to_cart(kinova_manager &robot_driver_1, double speed_linear_1, double spe
     return 0;
 }
 
-int gripper(kinova_manager &robot_driver_1, float position_1, kinova_manager &robot_driver_2, float position_2)
+int gripper(kinova_manager &robot_driver_1, float position_1, kinova_manager &robot_driver_2, float position_2, int64_t time)
 {
     auto error_callback = [](Kinova::Api::KError err)
     { cout << "_________ callback error _________" << err.toString(); };
@@ -670,6 +670,14 @@ int gripper(kinova_manager &robot_driver_1, float position_1, kinova_manager &ro
     finger_1->set_finger_identifier(1);
     finger_2->set_finger_identifier(1);
 
+    finger_1->set_value(0);
+    base_1->SendGripperCommand(gripper_command_1);
+
+    finger_2->set_value(0);
+    base_2->SendGripperCommand(gripper_command_1);
+
+    std::this_thread::sleep_for(std::chrono::milliseconds(time));
+
     float step = 0.01;
     float max_position = std::max(position_1, position_2);
 
@@ -689,7 +697,7 @@ int gripper(kinova_manager &robot_driver_1, float position_1, kinova_manager &ro
             base_2->SendGripperCommand(gripper_command_2);
         }
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(10)); // Synchronize movements
+        std::this_thread::sleep_for(std::chrono::milliseconds(time)); // Synchronize movements
     }
 
     //////////////////////////////////////////////////////////////////////
@@ -744,9 +752,9 @@ void go_to_cart_with_error_handling(kinova_manager &robot_driver_1, double speed
     }
 }
 
-void gripper_with_error_handling(kinova_manager &robot_driver_1, float position_1, kinova_manager &robot_driver_2, float position_2)
+void gripper_with_error_handling(kinova_manager &robot_driver_1, float position_1, kinova_manager &robot_driver_2, float position_2, int64_t time)
 {
-    int return_flag = gripper(robot_driver_1, position_1, robot_driver_2, position_2);
+    int return_flag = gripper(robot_driver_1, position_1, robot_driver_2, position_2, time);
     if (return_flag != 0)
     {
         // Handle the error internally (log, retry, etc.)
@@ -808,10 +816,16 @@ int main(int argc, char **argv)
     // if (return_flag != 0)
     //     return 0;
 
-    // go_to_with_error_handling(robot_driver_1, robot_driver_2, desired_pose_id);
-    go_to_cart_with_error_handling(robot_driver_1, 0.5, 10, robot_driver_2, 0.5, 10, desired_pose::BLANKET_1);
-    gripper_with_error_handling(robot_driver_1, 0.2, robot_driver_2, 0.9);
-    // go_to_with_error_handling(robot_driver_1, robot_driver_2, desired_pose_id);
+    gripper_with_error_handling(robot_driver_1, 0.01, robot_driver_2, 0.01, 1000);
+    go_to_with_error_handling(robot_driver_1, robot_driver_2, desired_pose_id);
+
+    go_to_cart_with_error_handling(robot_driver_1, 0.5, 10, robot_driver_2, 0.1, 10, desired_pose::BLANKET_1);
+    gripper_with_error_handling(robot_driver_1, 0.2, robot_driver_2, 0.9, 10);
+
+    go_to_with_error_handling(robot_driver_1, robot_driver_2, desired_pose_id);
+    go_to_cart_with_error_handling(robot_driver_1, 0.5, 10, robot_driver_2, 0.1, 10, desired_pose::BLANKET_1);
+
+    gripper_with_error_handling(robot_driver_1, 0.01, robot_driver_2, 0.01, 1000);
 
     robot_driver_1.deinitialize();
     robot_driver_2.deinitialize();
