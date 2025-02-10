@@ -33,8 +33,8 @@ namespace kinova_constants
 
    // Number of joints in the manipulator
    const int NUMBER_OF_JOINTS(6);
-   const int NUMBER_OF_SEGMENTS(7);
-   const int NUMBER_OF_FRAMES(8);
+   const int NUMBER_OF_SEGMENTS(6);
+   const int NUMBER_OF_FRAMES(7);
 
    //Arm's root acceleration
    const std::vector<double> root_acceleration_1 {-0.07, 0.04, 9.48, 0.0, 0.0, 0.0}; // For Kinova 1

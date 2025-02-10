@@ -41,10 +41,8 @@ enum control_mode
 
 enum robot_id
 {
-    YOUBOT = 0,
-    LWR_4 = 1,
-    KINOVA_GEN3_lITE_1 = 2,
-	KINOVA_GEN3_lITE_2 = 3
+    KINOVA_GEN3_lITE_1 = 1,
+	KINOVA_GEN3_lITE_2 = 2
 };
 
 class robot_manager
