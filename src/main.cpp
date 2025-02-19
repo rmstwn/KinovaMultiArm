@@ -66,16 +66,17 @@ SOFTWARE.
 #include <fk_vereshchagin.hpp>
 #include <geometry_utils.hpp>
 
+#include <zmq.hpp>
+
 #include "oml_mrtu.h"
 
 #define IP_ADDRESS_1 "192.168.2.10" // IP robot 1
 #define IP_ADDRESS_2 "192.168.2.11" // IP robot 2
 #define PORT 10000
 
-// Wheel parameters 
+// Wheel parameters
 constexpr double WHEEL_CIRCUMFERENCE = 300.0; // mm (example: 300 mm per revolution)
 constexpr int PULSES_PER_REVOLUTION = 12000;  // Encoder pulses per full wheel revolution
-
 
 enum desired_pose
 {
@@ -90,6 +91,9 @@ enum desired_pose
     BLANKET_1 = 10,
     BLANKET_2 = 11,
     BLANKET_3 = 12,
+    BLANKET_4 = 13,
+    BLANKET_5 = 14,
+    BLANKET_6 = 15,
 };
 
 enum path_types
@@ -826,75 +830,111 @@ bool moveTable(ModbusAZ &motor1, ModbusAZ &motor2, double distance_mm, int speed
     return true;
 }
 
+// Shared variables for vision-based coordinates
+std::mutex coord_mutex;
+double vision_x = 0.0, vision_y = 0.0, vision_z = 0.0;
+
+// Function to receive vision coordinates from ZMQ
+void visionReceiver()
+{
+    zmq::context_t context(1);
+    zmq::socket_t socket(context, ZMQ_SUB);
+    socket.connect("tcp://192.168.0.10:5555");
+    std::string topic = "P_camera";
+    socket.setsockopt(ZMQ_SUBSCRIBE, topic.c_str(), topic.size());
+
+    while (true)
+    {
+        zmq::message_t zmq_message;
+        socket.recv(zmq_message, zmq::recv_flags::none);
+        std::string message(static_cast<char *>(zmq_message.data()), zmq_message.size());
+
+        std::lock_guard<std::mutex> lock(coord_mutex);
+        // sscanf(message.c_str(), "%lf %lf %lf", &vision_x, &vision_y, &vision_z);
+
+        // Extract the topic and data
+        std::string received_topic(static_cast<char *>(message.data()), topic.size());
+        float data[3];
+        memcpy(data, static_cast<char *>(message.data()) + topic.size(), sizeof(data));
+
+        // Display the received data
+        // std::cout << "Received data on topic: " << received_topic << std::endl;
+        std::cout << "Data: " << data[0] << ", " << data[1] << ", " << data[2] << std::endl;
+
+        // std::cout << "Received vision coordinates: X=" << vision_x << " Y=" << vision_y << " Z=" << vision_z << std::endl;
+    }
+}
 
 int main(int argc, char **argv)
 {
-    // Kinova Robot Initialization
-    desired_pose_id = desired_pose::HOME;
-    desired_control_mode = control_mode::POSITION;
+    // Start vision receiver thread
+    std::thread vision_thread(visionReceiver);
 
-    kinova_manager robot_driver_1;
-    kinova_manager robot_driver_2;
+    // // Kinova Robot Initialization
+    // desired_pose_id = desired_pose::HOME;
+    // desired_control_mode = control_mode::POSITION;
 
-    // Initialize robot 1
-    if (!robot_driver_1.is_initialized())
-        robot_driver_1.initialize(robot_id::KINOVA_GEN3_lITE_1, 1.0 / static_cast<double>(RATE_HZ));
-    if (!robot_driver_1.is_initialized())
+    // kinova_manager robot_driver_1, robot_driver_2;
+
+    // if (!robot_driver_1.is_initialized())
+    //     robot_driver_1.initialize(robot_id::KINOVA_GEN3_lITE_1, 1.0 / static_cast<double>(RATE_HZ));
+    // if (!robot_driver_1.is_initialized())
+    // {
+    //     std::cerr << "Robot 1 not initialized.\n";
+    //     return 0;
+    // }
+
+    // if (!robot_driver_2.is_initialized())
+    //     robot_driver_2.initialize(robot_id::KINOVA_GEN3_lITE_2, 1.0 / static_cast<double>(RATE_HZ));
+    // if (!robot_driver_2.is_initialized())
+    // {
+    //     std::cerr << "Robot 2 not initialized.\n";
+    //     return 0;
+    // }
+
+    // // Mobile Moving Table Initialization
+    // try
+    // {
+    //     CommPC commport("/dev/ttyUSB0", 115200);
+    //     ModbusAZ motor1(&commport, 1), motor2(&commport, 2);
+
+    //     if (!OMconfigureMotor(motor1, "Motor 1") || !OMconfigureMotor(motor2, "Motor 2"))
+    //         return 1;
+
+    //     if (!moveTable(motor1, motor2, 500.0, 2000, 1))
+    //         return 1;
+
+    //     std::cout << "Table moved successfully.\n";
+    // }
+    // catch (const std::exception &e)
+    // {
+    //     std::cerr << "Motor initialization error: " << e.what() << std::endl;
+    //     return 1;
+    // }
+
+    // // Wait for a vision update before moving the robot
+    // std::this_thread::sleep_for(std::chrono::seconds(2));
+
+    // {
+    //     std::lock_guard<std::mutex> lock(coord_mutex);
+    //     std::cout << "Using vision-based coordinates: X=" << vision_x << " Y=" << vision_y << " Z=" << vision_z << std::endl;
+    // }
+
+    // // Robot Task Execution using received coordinates
+    // go_to_cart_with_error_handling(robot_driver_1, vision_x, 10, robot_driver_2, vision_y, 10, desired_pose::BLANKET_2);
+
+    // // Deinitialize robots
+    // robot_driver_1.deinitialize();
+    // robot_driver_2.deinitialize();
+
+    // std::cout << "Kinova Multi-Arm and Mobile Table Execution Completed!" << std::endl;
+
+    while (true)
     {
-        printf("Robot 1 is not initialized\n");
-        return 0;
+        /* code */
     }
 
-    // Initialize robot 2
-    if (!robot_driver_2.is_initialized())
-        robot_driver_2.initialize(robot_id::KINOVA_GEN3_lITE_2, 1.0 / static_cast<double>(RATE_HZ));
-    if (!robot_driver_2.is_initialized())
-    {
-        printf("Robot 2 is not initialized\n");
-        return 0;
-    }
-
-    // Mobile Moving Table Initialization
-    try
-    {
-        CommPC commport("/dev/ttyUSB0", 115200);
-        ModbusAZ motor1(&commport, 1);
-        ModbusAZ motor2(&commport, 2);
-
-        // Configure motors
-        std::vector<std::pair<ModbusAZ *, std::string>> motors = {
-            {&motor1, "Motor 1"},
-            {&motor2, "Motor 2"}};
-
-        for (auto &motor : motors)
-        {
-            if (!OMconfigureMotor(*motor.first, motor.second))
-            {
-                return 1;
-            }
-        }
-
-        // Move the mobile table forward 500 mm
-        if (!moveTable(motor1, motor2, 500.0, 2000, 1))
-        {
-            return 1;
-        }
-
-        std::cout << "Table movement command sent successfully." << std::endl;
-    }
-    catch (const std::exception &e)
-    {
-        std::cerr << "Error initializing motors: " << e.what() << std::endl;
-        return 1;
-    }
-
-    // Robot Task Execution
-    go_to_cart_with_error_handling(robot_driver_1, 0.5, 10, robot_driver_2, 0.5, 10, desired_pose::BLANKET_2);
-
-    // Deinitialize the robots
-    robot_driver_1.deinitialize();
-    robot_driver_2.deinitialize();
-
-    std::cout << "Kinova Multi-Arm Project and Mobile Table Movement Completed!" << std::endl;
+    // Stop the vision thread
+    vision_thread.detach();
     return 0;
 }

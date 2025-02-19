@@ -11,10 +11,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 find_package(PkgConfig REQUIRED)
 # Find orocos-kdl
 pkg_check_modules(orocos_kdl REQUIRED orocos-kdl)
-
-# find OM MODBUS 
-pkg_check_modules(LIBMODBUS REQUIRED libmodbus)
-
+# Find the orocos_kdl package
 find_package(orocos_kdl REQUIRED)
 
 list(APPEND CMAKE_PREFIX_PATH "/usr/include/eigen3")
@@ -27,6 +24,13 @@ find_package(Boost COMPONENTS system filesystem REQUIRED)
 
 # Find the urdfdom package
 find_package(urdfdom REQUIRED)
+
+# find OM MODBUS package
+pkg_check_modules(LIBMODBUS REQUIRED libmodbus)
+
+# Find the zeromq package
+find_package(cppzmq)
+
 
 # Set the path to the Kinova Kortex API include directory
 set(KORTEX_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/kortex/include")
@@ -94,4 +98,8 @@ target_link_libraries(KinovaMultiArm
     ${Boost_SYSTEM_LIBRARY}
 )
 
+# Link against MODBUS libraries
 target_link_libraries(KinovaMultiArm ${LIBMODBUS_LIBRARIES})
+
+# Link against zeromq libraries
+target_link_libraries(KinovaMultiArm cppzmq)

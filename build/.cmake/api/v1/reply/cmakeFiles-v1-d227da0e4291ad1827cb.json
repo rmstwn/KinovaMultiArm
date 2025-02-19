@@ -335,6 +335,39 @@
 		{
 			"isExternal" : true,
 			"path" : "/opt/ros/humble/lib/x86_64-linux-gnu/urdfdom/cmake/urdfdomExport-none.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "/usr/local/share/cmake/cppzmq/cppzmqConfigVersion.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "/usr/local/share/cmake/cppzmq/cppzmqConfig.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/usr/share/cmake-3.28/Modules/CMakeFindDependencyMacro.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "/usr/local/lib/cmake/ZeroMQ/ZeroMQConfigVersion.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "/usr/local/lib/cmake/ZeroMQ/ZeroMQConfig.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "/usr/local/lib/cmake/ZeroMQ/ZeroMQTargets.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "/usr/local/lib/cmake/ZeroMQ/ZeroMQTargets-release.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "/usr/local/share/cmake/cppzmq/cppzmqTargets.cmake"
 		}
 	],
 	"kind" : "cmakeFiles",

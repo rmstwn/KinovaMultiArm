@@ -177,6 +177,7 @@ KinovaMultiArm: /usr/local/lib/liborocos-kdl.so.1.5.1
 KinovaMultiArm: /usr/lib/x86_64-linux-gnu/libboost_filesystem.so.1.83.0
 KinovaMultiArm: /usr/lib/x86_64-linux-gnu/libboost_system.so.1.83.0
 KinovaMultiArm: /usr/lib/x86_64-linux-gnu/libboost_atomic.so.1.83.0
+KinovaMultiArm: /usr/local/lib/libzmq.so.5.2.6
 KinovaMultiArm: CMakeFiles/KinovaMultiArm.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/rama/Documents/cpp/KinovaMultiArm/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Linking CXX executable KinovaMultiArm"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/KinovaMultiArm.dir/link.txt --verbose=$(VERBOSE)

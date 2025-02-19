@@ -1722,6 +1722,18 @@
 			"value" : "/usr/bin/pkg-config"
 		},
 		{
+			"name" : "ZeroMQ_DIR",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : "The directory containing a CMake configuration file for ZeroMQ."
+				}
+			],
+			"type" : "PATH",
+			"value" : "/usr/local/lib/cmake/ZeroMQ"
+		},
+		{
 			"name" : "_CMAKE_LINKER_PUSHPOP_STATE_SUPPORTED",
 			"properties" : 
 			[
@@ -1856,6 +1868,18 @@
 			],
 			"type" : "PATH",
 			"value" : "/usr/lib/x86_64-linux-gnu/console_bridge/cmake"
+		},
+		{
+			"name" : "cppzmq_DIR",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : "The directory containing a CMake configuration file for cppzmq."
+				}
+			],
+			"type" : "PATH",
+			"value" : "/usr/local/share/cmake/cppzmq"
 		},
 		{
 			"name" : "kdl_parser_DIR",
