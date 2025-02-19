@@ -42,7 +42,9 @@ enum control_mode
 enum robot_id
 {
     KINOVA_GEN3_lITE_1 = 1,
-	KINOVA_GEN3_lITE_2 = 2
+	KINOVA_GEN3_lITE_2 = 2,
+	KINOVA_GEN3_lITE_3 = 3,
+	KINOVA_GEN3_lITE_4 = 4
 };
 
 class robot_manager

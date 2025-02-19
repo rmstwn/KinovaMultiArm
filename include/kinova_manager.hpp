@@ -54,7 +54,6 @@ SOFTWARE.
 #include <ActuatorConfigClientRpc.h>
 #include <SessionClientRpc.h>
 #include <SessionManager.h>
-
 #include <RouterClient.h>
 #include <TransportClientUdp.h>
 #include <TransportClientTcp.h>

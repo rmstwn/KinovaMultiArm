@@ -129,6 +129,30 @@ KinovaMultiArm/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/KinovaMultiArm.dir/build.make CMakeFiles/KinovaMultiArm.dir/build
 .PHONY : KinovaMultiArm/fast
 
+src/KinovaManager.o: src/KinovaManager.cpp.o
+.PHONY : src/KinovaManager.o
+
+# target to build an object file
+src/KinovaManager.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/KinovaMultiArm.dir/build.make CMakeFiles/KinovaMultiArm.dir/src/KinovaManager.cpp.o
+.PHONY : src/KinovaManager.cpp.o
+
+src/KinovaManager.i: src/KinovaManager.cpp.i
+.PHONY : src/KinovaManager.i
+
+# target to preprocess a source file
+src/KinovaManager.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/KinovaMultiArm.dir/build.make CMakeFiles/KinovaMultiArm.dir/src/KinovaManager.cpp.i
+.PHONY : src/KinovaManager.cpp.i
+
+src/KinovaManager.s: src/KinovaManager.cpp.s
+.PHONY : src/KinovaManager.s
+
+# target to generate assembly for a file
+src/KinovaManager.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/KinovaMultiArm.dir/build.make CMakeFiles/KinovaMultiArm.dir/src/KinovaManager.cpp.s
+.PHONY : src/KinovaManager.cpp.s
+
 src/constants.o: src/constants.cpp.o
 .PHONY : src/constants.o
 
@@ -201,30 +225,6 @@ src/kdl_eigen_conversions.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/KinovaMultiArm.dir/build.make CMakeFiles/KinovaMultiArm.dir/src/kdl_eigen_conversions.cpp.s
 .PHONY : src/kdl_eigen_conversions.cpp.s
 
-src/kinova_manager.o: src/kinova_manager.cpp.o
-.PHONY : src/kinova_manager.o
-
-# target to build an object file
-src/kinova_manager.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/KinovaMultiArm.dir/build.make CMakeFiles/KinovaMultiArm.dir/src/kinova_manager.cpp.o
-.PHONY : src/kinova_manager.cpp.o
-
-src/kinova_manager.i: src/kinova_manager.cpp.i
-.PHONY : src/kinova_manager.i
-
-# target to preprocess a source file
-src/kinova_manager.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/KinovaMultiArm.dir/build.make CMakeFiles/KinovaMultiArm.dir/src/kinova_manager.cpp.i
-.PHONY : src/kinova_manager.cpp.i
-
-src/kinova_manager.s: src/kinova_manager.cpp.s
-.PHONY : src/kinova_manager.s
-
-# target to generate assembly for a file
-src/kinova_manager.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/KinovaMultiArm.dir/build.make CMakeFiles/KinovaMultiArm.dir/src/kinova_manager.cpp.s
-.PHONY : src/kinova_manager.cpp.s
-
 src/main.o: src/main.cpp.o
 .PHONY : src/main.o
 
@@ -282,6 +282,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... KinovaMultiArm"
+	@echo "... src/KinovaManager.o"
+	@echo "... src/KinovaManager.i"
+	@echo "... src/KinovaManager.s"
 	@echo "... src/constants.o"
 	@echo "... src/constants.i"
 	@echo "... src/constants.s"
@@ -291,9 +294,6 @@ help:
 	@echo "... src/kdl_eigen_conversions.o"
 	@echo "... src/kdl_eigen_conversions.i"
 	@echo "... src/kdl_eigen_conversions.s"
-	@echo "... src/kinova_manager.o"
-	@echo "... src/kinova_manager.i"
-	@echo "... src/kinova_manager.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"

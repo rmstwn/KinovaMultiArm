@@ -97,24 +97,10 @@ CMakeFiles/KinovaMultiArm.dir/src/constants.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/KinovaMultiArm.dir/src/constants.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/rama/Documents/cpp/KinovaMultiArm/src/constants.cpp -o CMakeFiles/KinovaMultiArm.dir/src/constants.cpp.s
 
-CMakeFiles/KinovaMultiArm.dir/src/kinova_manager.cpp.o: CMakeFiles/KinovaMultiArm.dir/flags.make
-CMakeFiles/KinovaMultiArm.dir/src/kinova_manager.cpp.o: /home/rama/Documents/cpp/KinovaMultiArm/src/kinova_manager.cpp
-CMakeFiles/KinovaMultiArm.dir/src/kinova_manager.cpp.o: CMakeFiles/KinovaMultiArm.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/rama/Documents/cpp/KinovaMultiArm/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/KinovaMultiArm.dir/src/kinova_manager.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/KinovaMultiArm.dir/src/kinova_manager.cpp.o -MF CMakeFiles/KinovaMultiArm.dir/src/kinova_manager.cpp.o.d -o CMakeFiles/KinovaMultiArm.dir/src/kinova_manager.cpp.o -c /home/rama/Documents/cpp/KinovaMultiArm/src/kinova_manager.cpp
-
-CMakeFiles/KinovaMultiArm.dir/src/kinova_manager.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/KinovaMultiArm.dir/src/kinova_manager.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/rama/Documents/cpp/KinovaMultiArm/src/kinova_manager.cpp > CMakeFiles/KinovaMultiArm.dir/src/kinova_manager.cpp.i
-
-CMakeFiles/KinovaMultiArm.dir/src/kinova_manager.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/KinovaMultiArm.dir/src/kinova_manager.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/rama/Documents/cpp/KinovaMultiArm/src/kinova_manager.cpp -o CMakeFiles/KinovaMultiArm.dir/src/kinova_manager.cpp.s
-
 CMakeFiles/KinovaMultiArm.dir/src/fk_vereshchagin.cpp.o: CMakeFiles/KinovaMultiArm.dir/flags.make
 CMakeFiles/KinovaMultiArm.dir/src/fk_vereshchagin.cpp.o: /home/rama/Documents/cpp/KinovaMultiArm/src/fk_vereshchagin.cpp
 CMakeFiles/KinovaMultiArm.dir/src/fk_vereshchagin.cpp.o: CMakeFiles/KinovaMultiArm.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/rama/Documents/cpp/KinovaMultiArm/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/KinovaMultiArm.dir/src/fk_vereshchagin.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/rama/Documents/cpp/KinovaMultiArm/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/KinovaMultiArm.dir/src/fk_vereshchagin.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/KinovaMultiArm.dir/src/fk_vereshchagin.cpp.o -MF CMakeFiles/KinovaMultiArm.dir/src/fk_vereshchagin.cpp.o.d -o CMakeFiles/KinovaMultiArm.dir/src/fk_vereshchagin.cpp.o -c /home/rama/Documents/cpp/KinovaMultiArm/src/fk_vereshchagin.cpp
 
 CMakeFiles/KinovaMultiArm.dir/src/fk_vereshchagin.cpp.i: cmake_force
@@ -128,7 +114,7 @@ CMakeFiles/KinovaMultiArm.dir/src/fk_vereshchagin.cpp.s: cmake_force
 CMakeFiles/KinovaMultiArm.dir/src/kdl_eigen_conversions.cpp.o: CMakeFiles/KinovaMultiArm.dir/flags.make
 CMakeFiles/KinovaMultiArm.dir/src/kdl_eigen_conversions.cpp.o: /home/rama/Documents/cpp/KinovaMultiArm/src/kdl_eigen_conversions.cpp
 CMakeFiles/KinovaMultiArm.dir/src/kdl_eigen_conversions.cpp.o: CMakeFiles/KinovaMultiArm.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/rama/Documents/cpp/KinovaMultiArm/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/KinovaMultiArm.dir/src/kdl_eigen_conversions.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/rama/Documents/cpp/KinovaMultiArm/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/KinovaMultiArm.dir/src/kdl_eigen_conversions.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/KinovaMultiArm.dir/src/kdl_eigen_conversions.cpp.o -MF CMakeFiles/KinovaMultiArm.dir/src/kdl_eigen_conversions.cpp.o.d -o CMakeFiles/KinovaMultiArm.dir/src/kdl_eigen_conversions.cpp.o -c /home/rama/Documents/cpp/KinovaMultiArm/src/kdl_eigen_conversions.cpp
 
 CMakeFiles/KinovaMultiArm.dir/src/kdl_eigen_conversions.cpp.i: cmake_force
@@ -142,7 +128,7 @@ CMakeFiles/KinovaMultiArm.dir/src/kdl_eigen_conversions.cpp.s: cmake_force
 CMakeFiles/KinovaMultiArm.dir/src/oml_mrtu.cpp.o: CMakeFiles/KinovaMultiArm.dir/flags.make
 CMakeFiles/KinovaMultiArm.dir/src/oml_mrtu.cpp.o: /home/rama/Documents/cpp/KinovaMultiArm/src/oml_mrtu.cpp
 CMakeFiles/KinovaMultiArm.dir/src/oml_mrtu.cpp.o: CMakeFiles/KinovaMultiArm.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/rama/Documents/cpp/KinovaMultiArm/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/KinovaMultiArm.dir/src/oml_mrtu.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/rama/Documents/cpp/KinovaMultiArm/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/KinovaMultiArm.dir/src/oml_mrtu.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/KinovaMultiArm.dir/src/oml_mrtu.cpp.o -MF CMakeFiles/KinovaMultiArm.dir/src/oml_mrtu.cpp.o.d -o CMakeFiles/KinovaMultiArm.dir/src/oml_mrtu.cpp.o -c /home/rama/Documents/cpp/KinovaMultiArm/src/oml_mrtu.cpp
 
 CMakeFiles/KinovaMultiArm.dir/src/oml_mrtu.cpp.i: cmake_force
@@ -153,24 +139,38 @@ CMakeFiles/KinovaMultiArm.dir/src/oml_mrtu.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/KinovaMultiArm.dir/src/oml_mrtu.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/rama/Documents/cpp/KinovaMultiArm/src/oml_mrtu.cpp -o CMakeFiles/KinovaMultiArm.dir/src/oml_mrtu.cpp.s
 
+CMakeFiles/KinovaMultiArm.dir/src/KinovaManager.cpp.o: CMakeFiles/KinovaMultiArm.dir/flags.make
+CMakeFiles/KinovaMultiArm.dir/src/KinovaManager.cpp.o: /home/rama/Documents/cpp/KinovaMultiArm/src/KinovaManager.cpp
+CMakeFiles/KinovaMultiArm.dir/src/KinovaManager.cpp.o: CMakeFiles/KinovaMultiArm.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/rama/Documents/cpp/KinovaMultiArm/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/KinovaMultiArm.dir/src/KinovaManager.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/KinovaMultiArm.dir/src/KinovaManager.cpp.o -MF CMakeFiles/KinovaMultiArm.dir/src/KinovaManager.cpp.o.d -o CMakeFiles/KinovaMultiArm.dir/src/KinovaManager.cpp.o -c /home/rama/Documents/cpp/KinovaMultiArm/src/KinovaManager.cpp
+
+CMakeFiles/KinovaMultiArm.dir/src/KinovaManager.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/KinovaMultiArm.dir/src/KinovaManager.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/rama/Documents/cpp/KinovaMultiArm/src/KinovaManager.cpp > CMakeFiles/KinovaMultiArm.dir/src/KinovaManager.cpp.i
+
+CMakeFiles/KinovaMultiArm.dir/src/KinovaManager.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/KinovaMultiArm.dir/src/KinovaManager.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/rama/Documents/cpp/KinovaMultiArm/src/KinovaManager.cpp -o CMakeFiles/KinovaMultiArm.dir/src/KinovaManager.cpp.s
+
 # Object files for target KinovaMultiArm
 KinovaMultiArm_OBJECTS = \
 "CMakeFiles/KinovaMultiArm.dir/src/main.cpp.o" \
 "CMakeFiles/KinovaMultiArm.dir/src/constants.cpp.o" \
-"CMakeFiles/KinovaMultiArm.dir/src/kinova_manager.cpp.o" \
 "CMakeFiles/KinovaMultiArm.dir/src/fk_vereshchagin.cpp.o" \
 "CMakeFiles/KinovaMultiArm.dir/src/kdl_eigen_conversions.cpp.o" \
-"CMakeFiles/KinovaMultiArm.dir/src/oml_mrtu.cpp.o"
+"CMakeFiles/KinovaMultiArm.dir/src/oml_mrtu.cpp.o" \
+"CMakeFiles/KinovaMultiArm.dir/src/KinovaManager.cpp.o"
 
 # External object files for target KinovaMultiArm
 KinovaMultiArm_EXTERNAL_OBJECTS =
 
 KinovaMultiArm: CMakeFiles/KinovaMultiArm.dir/src/main.cpp.o
 KinovaMultiArm: CMakeFiles/KinovaMultiArm.dir/src/constants.cpp.o
-KinovaMultiArm: CMakeFiles/KinovaMultiArm.dir/src/kinova_manager.cpp.o
 KinovaMultiArm: CMakeFiles/KinovaMultiArm.dir/src/fk_vereshchagin.cpp.o
 KinovaMultiArm: CMakeFiles/KinovaMultiArm.dir/src/kdl_eigen_conversions.cpp.o
 KinovaMultiArm: CMakeFiles/KinovaMultiArm.dir/src/oml_mrtu.cpp.o
+KinovaMultiArm: CMakeFiles/KinovaMultiArm.dir/src/KinovaManager.cpp.o
 KinovaMultiArm: CMakeFiles/KinovaMultiArm.dir/build.make
 KinovaMultiArm: /home/rama/Documents/cpp/KinovaMultiArm/kortex/lib/release/libKortexApiCpp.a
 KinovaMultiArm: /usr/local/lib/liborocos-kdl.so.1.5.1

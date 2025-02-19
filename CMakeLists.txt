@@ -31,7 +31,6 @@ pkg_check_modules(LIBMODBUS REQUIRED libmodbus)
 # Find the zeromq package
 find_package(cppzmq)
 
-
 # Set the path to the Kinova Kortex API include directory
 set(KORTEX_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/kortex/include")
 
@@ -77,10 +76,11 @@ link_directories(${KORTEX_LIBRARY_DIR})
 add_executable(KinovaMultiArm 
     src/main.cpp
     src/constants.cpp
-    src/kinova_manager.cpp
+    #src/kinova_manager.cpp
     src/fk_vereshchagin.cpp
     src/kdl_eigen_conversions.cpp
     src/oml_mrtu.cpp
+    src/KinovaManager.cpp
 )
 
 # Link against the Kinova Kortex API library

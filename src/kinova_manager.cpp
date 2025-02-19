@@ -26,8 +26,11 @@ SOFTWARE.
 
 #include "kinova_manager.hpp"
 
-#define IP_ADDRESS_1 "192.168.2.10"
-#define IP_ADDRESS_2 "192.168.2.11"
+#define IP_ADDRESS_1 "192.168.2.10" // IP robot 1
+#define IP_ADDRESS_2 "192.168.2.11" // IP robot 2
+#define IP_ADDRESS_3 "192.168.2.12" // IP robot 3
+#define IP_ADDRESS_4 "192.168.2.13" // IP robot 4
+
 #define PORT 10000
 #define PORT_REAL_TIME 10001
 #define ACTUATOR_COUNT 6
@@ -663,8 +666,12 @@ void kinova_manager::initialize(const int id, const double DT_SEC)
 
     if (kinova_id == KINOVA_GEN3_lITE_1)
         transport_->connect(IP_ADDRESS_1, PORT);
-    else
+    else if (kinova_id == KINOVA_GEN3_lITE_2)
         transport_->connect(IP_ADDRESS_2, PORT);
+    else if (kinova_id == KINOVA_GEN3_lITE_3)
+        transport_->connect(IP_ADDRESS_3, PORT);
+    else if (kinova_id == KINOVA_GEN3_lITE_4)
+        transport_->connect(IP_ADDRESS_4, PORT);
 
     // Set session data connection information
     auto create_session_info = Kinova::Api::Session::CreateSessionInfo();
