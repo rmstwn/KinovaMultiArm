@@ -847,21 +847,13 @@ void visionReceiver()
     {
         zmq::message_t zmq_message;
         socket.recv(zmq_message, zmq::recv_flags::none);
-        std::string message(static_cast<char *>(zmq_message.data()), zmq_message.size());
+        std::string message(static_cast<char *>(zmq_message.data()) + topic.size(), zmq_message.size());
 
         std::lock_guard<std::mutex> lock(coord_mutex);
-        // sscanf(message.c_str(), "%lf %lf %lf", &vision_x, &vision_y, &vision_z);
+        sscanf(message.c_str(), "%lf %lf %lf", &vision_x, &vision_y, &vision_z);
 
-        // Extract the topic and data
-        std::string received_topic(static_cast<char *>(message.data()), topic.size());
-        float data[3];
-        memcpy(data, static_cast<char *>(message.data()) + topic.size(), sizeof(data));
-
-        // Display the received data
-        // std::cout << "Received data on topic: " << received_topic << std::endl;
-        std::cout << "Data: " << data[0] << ", " << data[1] << ", " << data[2] << std::endl;
-
-        // std::cout << "Received vision coordinates: X=" << vision_x << " Y=" << vision_y << " Z=" << vision_z << std::endl;
+        // std::cout << "Received: " << message << std::endl;
+        std::cout << "Received vision coordinates: X=" << vision_x << " Y=" << vision_y << " Z=" << vision_z << std::endl;
     }
 }
 
