@@ -983,4 +983,8 @@ CMakeFiles/KinovaMultiArm.dir/src/main.cpp.o: \
  /home/rama/Documents/cpp/KinovaMultiArm/kortex/include/google/protobuf/util/type_resolver.h \
  /home/rama/Documents/cpp/KinovaMultiArm/kortex/include/google/protobuf/stubs/status.h \
  /home/rama/Documents/cpp/KinovaMultiArm/kortex/include/google/protobuf/stubs/stringpiece.h \
- /home/rama/Documents/cpp/KinovaMultiArm/kortex/include/google/protobuf/stubs/bytestream.h
+ /home/rama/Documents/cpp/KinovaMultiArm/kortex/include/google/protobuf/stubs/bytestream.h \
+ /home/rama/Documents/cpp/KinovaMultiArm/include/oml_mrtu.h \
+ /usr/include/modbus/modbus.h /usr/include/modbus/modbus-version.h \
+ /usr/include/modbus/modbus-rtu.h /usr/include/modbus/modbus.h \
+ /usr/include/modbus/modbus-tcp.h

@@ -9,6 +9,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/KinovaMultiArm.dir/src/kinova_manager.cpp.o.d"
   "CMakeFiles/KinovaMultiArm.dir/src/main.cpp.o"
   "CMakeFiles/KinovaMultiArm.dir/src/main.cpp.o.d"
+  "CMakeFiles/KinovaMultiArm.dir/src/oml_mrtu.cpp.o"
+  "CMakeFiles/KinovaMultiArm.dir/src/oml_mrtu.cpp.o.d"
   "KinovaMultiArm"
   "KinovaMultiArm.pdb"
 )

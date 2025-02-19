@@ -270,6 +270,9 @@ onelibd:FILEPATH=onelibd-NOTFOUND
 orocos_kdl_DIR:PATH=/usr/local/share/orocos_kdl/cmake
 
 //Path to a library.
+pkgcfg_lib_LIBMODBUS_modbus:FILEPATH=/usr/lib/x86_64-linux-gnu/libmodbus.so
+
+//Path to a library.
 pkgcfg_lib_orocos_kdl_orocos-kdl:FILEPATH=/usr/local/lib/liborocos-kdl.so
 
 //The directory containing a CMake configuration file for urdfdom.
@@ -432,13 +435,50 @@ CMAKE_VERBOSE_MAKEFILE-ADVANCED:INTERNAL=1
 FIND_PACKAGE_MESSAGE_DETAILS_Boost:INTERNAL=[/usr/lib/x86_64-linux-gnu/cmake/Boost-1.83.0/BoostConfig.cmake][cfound components: system filesystem ][v1.83.0()]
 //Details about finding PkgConfig
 FIND_PACKAGE_MESSAGE_DETAILS_PkgConfig:INTERNAL=[/usr/bin/pkg-config][v1.8.1()]
+LIBMODBUS_CFLAGS:INTERNAL=-I/usr/include/modbus
+LIBMODBUS_CFLAGS_I:INTERNAL=
+LIBMODBUS_CFLAGS_OTHER:INTERNAL=
+LIBMODBUS_FOUND:INTERNAL=1
+LIBMODBUS_INCLUDEDIR:INTERNAL=/usr/include
+LIBMODBUS_INCLUDE_DIRS:INTERNAL=/usr/include/modbus
+LIBMODBUS_LDFLAGS:INTERNAL=-L/usr/lib/x86_64-linux-gnu;-lmodbus
+LIBMODBUS_LDFLAGS_OTHER:INTERNAL=
+LIBMODBUS_LIBDIR:INTERNAL=/usr/lib/x86_64-linux-gnu
+LIBMODBUS_LIBRARIES:INTERNAL=modbus
+LIBMODBUS_LIBRARY_DIRS:INTERNAL=/usr/lib/x86_64-linux-gnu
+LIBMODBUS_LIBS:INTERNAL=
+LIBMODBUS_LIBS_L:INTERNAL=
+LIBMODBUS_LIBS_OTHER:INTERNAL=
+LIBMODBUS_LIBS_PATHS:INTERNAL=
+LIBMODBUS_MODULE_NAME:INTERNAL=libmodbus
+LIBMODBUS_PREFIX:INTERNAL=/usr
+LIBMODBUS_STATIC_CFLAGS:INTERNAL=-I/usr/include/modbus
+LIBMODBUS_STATIC_CFLAGS_I:INTERNAL=
+LIBMODBUS_STATIC_CFLAGS_OTHER:INTERNAL=
+LIBMODBUS_STATIC_INCLUDE_DIRS:INTERNAL=/usr/include/modbus
+LIBMODBUS_STATIC_LDFLAGS:INTERNAL=-L/usr/lib/x86_64-linux-gnu;-lmodbus
+LIBMODBUS_STATIC_LDFLAGS_OTHER:INTERNAL=
+LIBMODBUS_STATIC_LIBDIR:INTERNAL=
+LIBMODBUS_STATIC_LIBRARIES:INTERNAL=modbus
+LIBMODBUS_STATIC_LIBRARY_DIRS:INTERNAL=/usr/lib/x86_64-linux-gnu
+LIBMODBUS_STATIC_LIBS:INTERNAL=
+LIBMODBUS_STATIC_LIBS_L:INTERNAL=
+LIBMODBUS_STATIC_LIBS_OTHER:INTERNAL=
+LIBMODBUS_STATIC_LIBS_PATHS:INTERNAL=
+LIBMODBUS_VERSION:INTERNAL=3.1.10
+LIBMODBUS_libmodbus_INCLUDEDIR:INTERNAL=
+LIBMODBUS_libmodbus_LIBDIR:INTERNAL=
+LIBMODBUS_libmodbus_PREFIX:INTERNAL=
+LIBMODBUS_libmodbus_VERSION:INTERNAL=
 //ADVANCED property for variable: PKG_CONFIG_ARGN
 PKG_CONFIG_ARGN-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: PKG_CONFIG_EXECUTABLE
 PKG_CONFIG_EXECUTABLE-ADVANCED:INTERNAL=1
 //linker supports push/pop state
 _CMAKE_LINKER_PUSHPOP_STATE_SUPPORTED:INTERNAL=TRUE
+__pkg_config_arguments_LIBMODBUS:INTERNAL=REQUIRED;libmodbus
 __pkg_config_arguments_orocos_kdl:INTERNAL=REQUIRED;orocos-kdl
+__pkg_config_checked_LIBMODBUS:INTERNAL=1
 __pkg_config_checked_orocos_kdl:INTERNAL=1
 //ADVANCED property for variable: boost_atomic_DIR
 boost_atomic_DIR-ADVANCED:INTERNAL=1
@@ -483,7 +523,9 @@ orocos_kdl_orocos-kdl_INCLUDEDIR:INTERNAL=
 orocos_kdl_orocos-kdl_LIBDIR:INTERNAL=
 orocos_kdl_orocos-kdl_PREFIX:INTERNAL=
 orocos_kdl_orocos-kdl_VERSION:INTERNAL=
+//ADVANCED property for variable: pkgcfg_lib_LIBMODBUS_modbus
+pkgcfg_lib_LIBMODBUS_modbus-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: pkgcfg_lib_orocos_kdl_orocos-kdl
 pkgcfg_lib_orocos_kdl_orocos-kdl-ADVANCED:INTERNAL=1
-prefix_result:INTERNAL=/usr/local/lib/pkgconfig/../../lib
+prefix_result:INTERNAL=/usr/lib/x86_64-linux-gnu
 

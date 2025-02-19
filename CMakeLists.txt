@@ -12,6 +12,8 @@ find_package(PkgConfig REQUIRED)
 # Find orocos-kdl
 pkg_check_modules(orocos_kdl REQUIRED orocos-kdl)
 
+# find OM MODBUS 
+pkg_check_modules(LIBMODBUS REQUIRED libmodbus)
 
 find_package(orocos_kdl REQUIRED)
 
@@ -60,6 +62,10 @@ include_directories(
   ${kdl_parser_INCLUDE_DIRS}
 )
 
+# Include OM MODBUS 
+include_directories(${LIBMODBUS_INCLUDE_DIRS})
+link_directories(${LIBMODBUS_LIBRARY_DIRS})
+
 # Add the Kinova Kortex API library directory to the library path
 link_directories(${KORTEX_LIBRARY_DIR})
 
@@ -70,6 +76,7 @@ add_executable(KinovaMultiArm
     src/kinova_manager.cpp
     src/fk_vereshchagin.cpp
     src/kdl_eigen_conversions.cpp
+    src/oml_mrtu.cpp
 )
 
 # Link against the Kinova Kortex API library
@@ -86,3 +93,5 @@ target_link_libraries(KinovaMultiArm
     ${Boost_FILESYSTEM_LIBRARY}
     ${Boost_SYSTEM_LIBRARY}
 )
+
+target_link_libraries(KinovaMultiArm ${LIBMODBUS_LIBRARIES})

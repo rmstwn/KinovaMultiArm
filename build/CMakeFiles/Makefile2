@@ -81,12 +81,12 @@ clean: CMakeFiles/KinovaMultiArm.dir/clean
 CMakeFiles/KinovaMultiArm.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/KinovaMultiArm.dir/build.make CMakeFiles/KinovaMultiArm.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/KinovaMultiArm.dir/build.make CMakeFiles/KinovaMultiArm.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/rama/Documents/cpp/KinovaMultiArm/build/CMakeFiles --progress-num=1,2,3,4,5,6 "Built target KinovaMultiArm"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/rama/Documents/cpp/KinovaMultiArm/build/CMakeFiles --progress-num=1,2,3,4,5,6,7 "Built target KinovaMultiArm"
 .PHONY : CMakeFiles/KinovaMultiArm.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/KinovaMultiArm.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/rama/Documents/cpp/KinovaMultiArm/build/CMakeFiles 6
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/rama/Documents/cpp/KinovaMultiArm/build/CMakeFiles 7
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/KinovaMultiArm.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/rama/Documents/cpp/KinovaMultiArm/build/CMakeFiles 0
 .PHONY : CMakeFiles/KinovaMultiArm.dir/rule

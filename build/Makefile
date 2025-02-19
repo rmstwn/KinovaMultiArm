@@ -249,6 +249,30 @@ src/main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/KinovaMultiArm.dir/build.make CMakeFiles/KinovaMultiArm.dir/src/main.cpp.s
 .PHONY : src/main.cpp.s
 
+src/oml_mrtu.o: src/oml_mrtu.cpp.o
+.PHONY : src/oml_mrtu.o
+
+# target to build an object file
+src/oml_mrtu.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/KinovaMultiArm.dir/build.make CMakeFiles/KinovaMultiArm.dir/src/oml_mrtu.cpp.o
+.PHONY : src/oml_mrtu.cpp.o
+
+src/oml_mrtu.i: src/oml_mrtu.cpp.i
+.PHONY : src/oml_mrtu.i
+
+# target to preprocess a source file
+src/oml_mrtu.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/KinovaMultiArm.dir/build.make CMakeFiles/KinovaMultiArm.dir/src/oml_mrtu.cpp.i
+.PHONY : src/oml_mrtu.cpp.i
+
+src/oml_mrtu.s: src/oml_mrtu.cpp.s
+.PHONY : src/oml_mrtu.s
+
+# target to generate assembly for a file
+src/oml_mrtu.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/KinovaMultiArm.dir/build.make CMakeFiles/KinovaMultiArm.dir/src/oml_mrtu.cpp.s
+.PHONY : src/oml_mrtu.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -273,6 +297,9 @@ help:
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
+	@echo "... src/oml_mrtu.o"
+	@echo "... src/oml_mrtu.i"
+	@echo "... src/oml_mrtu.s"
 .PHONY : help
 
 

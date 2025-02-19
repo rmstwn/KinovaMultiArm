@@ -66,9 +66,16 @@ SOFTWARE.
 #include <fk_vereshchagin.hpp>
 #include <geometry_utils.hpp>
 
+#include "oml_mrtu.h"
+
 #define IP_ADDRESS_1 "192.168.2.10" // IP robot 1
 #define IP_ADDRESS_2 "192.168.2.11" // IP robot 2
 #define PORT 10000
+
+// Wheel parameters 
+constexpr double WHEEL_CIRCUMFERENCE = 300.0; // mm (example: 300 mm per revolution)
+constexpr int PULSES_PER_REVOLUTION = 12000;  // Encoder pulses per full wheel revolution
+
 
 enum desired_pose
 {
@@ -349,8 +356,14 @@ int go_to_cart(kinova_manager &robot_driver_1, double speed_linear_1, double spe
         break;
 
     case desired_pose::BLANKET_1:
-        desired_ee_pose_1 = Pose(0.0, -0.5, 0.427, 85.0, 0.0, 54.0);
-        desired_ee_pose_2 = Pose(0.2, 0.75, 0.311, 117.0, -98.0, 87.0);
+        // desired_ee_pose_1 = Pose(0.74, -0.4, 0.3, 55.0, 90.0, 54.0);
+        desired_ee_pose_1 = Pose(0.2, -0.6, 0.311, 10.0, -90.0, 90.0);
+        desired_ee_pose_2 = Pose(0.2, 0.75, 0.311, 40.0, -90.0, 180.0);
+        break;
+
+    case desired_pose::BLANKET_2:
+        desired_ee_pose_1 = Pose(0.2, -0.6, 0.311, 10.0, -90.0, 90.0);
+        desired_ee_pose_2 = Pose(0.75, 0.2, 0.311, 145.0, -90.0, 40.0);
         break;
 
     default:
@@ -763,31 +776,67 @@ void gripper_with_error_handling(kinova_manager &robot_driver_1, float position_
     }
 }
 
+// Function to configure motor parameters and reset alarms
+bool OMconfigureMotor(ModbusAZ &motor, const std::string &motorName)
+{
+    if (motor.writeParamAcc(1000, 100000).empty())
+    {
+        std::cerr << "Failed to set acceleration parameters for " << motorName << "." << std::endl;
+        return false;
+    }
+    if (motor.writeParamDec(1000, 100000).empty())
+    {
+        std::cerr << "Failed to set deceleration parameters for " << motorName << "." << std::endl;
+        return false;
+    }
+    if (motor.writeParamCurrent(1000).empty())
+    {
+        std::cerr << "Failed to set current for " << motorName << "." << std::endl;
+        return false;
+    }
+
+    // Reset alarm
+    motor.resetAlarm();
+    std::cout << "Successfully configured " << motorName << " and reset its alarm." << std::endl;
+    return true;
+}
+
+// Function to move the mobile moving table
+bool moveTable(ModbusAZ &motor1, ModbusAZ &motor2, double distance_mm, int speed_pulses, int direction)
+{
+    // Convert distance to encoder pulses
+    int pulses = static_cast<int>((distance_mm / WHEEL_CIRCUMFERENCE) * PULSES_PER_REVOLUTION);
+
+    std::cout << "Moving table " << distance_mm << " mm -> " << pulses << " pulses" << std::endl;
+
+    // Move motor 1
+    if (motor1.startPosition(pulses, speed_pulses, direction).empty())
+    {
+        std::cerr << "Failed to move Motor 1." << std::endl;
+        return false;
+    }
+
+    // Move motor 2 in reverse direction (assuming differential drive)
+    if (motor2.startPosition(pulses, speed_pulses, direction).empty())
+    {
+        std::cerr << "Failed to move Motor 2." << std::endl;
+        return false;
+    }
+
+    return true;
+}
+
+
 int main(int argc, char **argv)
 {
-    RATE_HZ = 700; // Hz
-
+    // Kinova Robot Initialization
     desired_pose_id = desired_pose::HOME;
     desired_control_mode = control_mode::POSITION;
 
     kinova_manager robot_driver_1;
     kinova_manager robot_driver_2;
 
-    int return_flag = 0;
-
-    // return_flag = go_to(robot_driver_1, robot_driver_2, desired_pose_id);
-    // if (return_flag != 0)
-    //     return 0;
-
-    // return_flag = go_to_cart(robot_driver_1, robot_driver_2, desired_pose::BLANKET_1);
-    // if (return_flag != 0)
-    //     return 0;
-
-    // return_flag = go_to(robot_driver_1, robot_driver_2, desired_pose_id);
-    // if (return_flag != 0)
-    //     return 0;
-
-    // Extract robot model and if not simulation, establish connection with motor drivers
+    // Initialize robot 1
     if (!robot_driver_1.is_initialized())
         robot_driver_1.initialize(robot_id::KINOVA_GEN3_lITE_1, 1.0 / static_cast<double>(RATE_HZ));
     if (!robot_driver_1.is_initialized())
@@ -796,6 +845,7 @@ int main(int argc, char **argv)
         return 0;
     }
 
+    // Initialize robot 2
     if (!robot_driver_2.is_initialized())
         robot_driver_2.initialize(robot_id::KINOVA_GEN3_lITE_2, 1.0 / static_cast<double>(RATE_HZ));
     if (!robot_driver_2.is_initialized())
@@ -804,32 +854,47 @@ int main(int argc, char **argv)
         return 0;
     }
 
-    // return_flag = go_to(robot_driver_1, robot_driver_2, desired_pose_id);
-    // if (return_flag != 0)
-    //     return 0;
+    // Mobile Moving Table Initialization
+    try
+    {
+        CommPC commport("/dev/ttyUSB0", 115200);
+        ModbusAZ motor1(&commport, 1);
+        ModbusAZ motor2(&commport, 2);
 
-    // return_flag = go_to_cart(robot_driver_1, 0.5, 10, robot_driver_2, 0.1, 10, desired_pose::BLANKET_1);
-    // if (return_flag != 0)
-    //     return 0;
+        // Configure motors
+        std::vector<std::pair<ModbusAZ *, std::string>> motors = {
+            {&motor1, "Motor 1"},
+            {&motor2, "Motor 2"}};
 
-    // return_flag = go_to(robot_driver_1, robot_driver_2, desired_pose_id);
-    // if (return_flag != 0)
-    //     return 0;
+        for (auto &motor : motors)
+        {
+            if (!OMconfigureMotor(*motor.first, motor.second))
+            {
+                return 1;
+            }
+        }
 
-    gripper_with_error_handling(robot_driver_1, 0.01, robot_driver_2, 0.01, 1000);
-    go_to_with_error_handling(robot_driver_1, robot_driver_2, desired_pose_id);
+        // Move the mobile table forward 500 mm
+        if (!moveTable(motor1, motor2, 500.0, 2000, 1))
+        {
+            return 1;
+        }
 
-    go_to_cart_with_error_handling(robot_driver_1, 0.5, 10, robot_driver_2, 0.1, 10, desired_pose::BLANKET_1);
-    gripper_with_error_handling(robot_driver_1, 0.2, robot_driver_2, 0.9, 10);
+        std::cout << "Table movement command sent successfully." << std::endl;
+    }
+    catch (const std::exception &e)
+    {
+        std::cerr << "Error initializing motors: " << e.what() << std::endl;
+        return 1;
+    }
 
-    go_to_with_error_handling(robot_driver_1, robot_driver_2, desired_pose_id);
-    go_to_cart_with_error_handling(robot_driver_1, 0.5, 10, robot_driver_2, 0.1, 10, desired_pose::BLANKET_1);
+    // Robot Task Execution
+    go_to_cart_with_error_handling(robot_driver_1, 0.5, 10, robot_driver_2, 0.5, 10, desired_pose::BLANKET_2);
 
-    gripper_with_error_handling(robot_driver_1, 0.01, robot_driver_2, 0.01, 1000);
-
+    // Deinitialize the robots
     robot_driver_1.deinitialize();
     robot_driver_2.deinitialize();
 
-    std::cout << "Kinova Multi-Arm Project Finish!" << std::endl;
+    std::cout << "Kinova Multi-Arm Project and Mobile Table Movement Completed!" << std::endl;
     return 0;
 }
