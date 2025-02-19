@@ -650,8 +650,8 @@ int main()
     // KinovaManager robot_3(IP_ADDRESS_3, 10000);
     // KinovaManager robot_4(IP_ADDRESS_4, 10000);
 
-    robot_1.gripper(0.1, 10);
-    robot_2.gripper(0.1, 10);
+    // robot_1.gripper(0.1, 10);
+    // robot_2.gripper(0.1, 10);
 
     // Mutexes for thread safety
     std::mutex robot_mutex_1, robot_mutex_2, robot_mutex_3, robot_mutex_4;
@@ -672,7 +672,7 @@ int main()
 
     // Create threads for moving robots to CANDLE pose after opening grippers
     std::thread robot_thread_1([&]()
-                               { move_robot(robot_1, CANDLE, robot_mutex_1); });
+                               { move_robot(robot_1, HOME, robot_mutex_1); });
     std::thread robot_thread_2([&]()
                                { move_robot(robot_2, CANDLE, robot_mutex_2); });
     // std::thread robot_thread_3([&]() { move_robot(robot_3, CANDLE, robot_mutex_3); });
@@ -702,7 +702,7 @@ int main()
 
     // Move all robots to HOME pose
     std::thread robot_thread_5([&]()
-                               { move_robot(robot_1, HOME, robot_mutex_1); });
+                               { move_robot(robot_1, CANDLE, robot_mutex_1); });
     std::thread robot_thread_6([&]()
                                { move_robot(robot_2, HOME, robot_mutex_2); });
     // std::thread robot_thread_7([&]() { move_robot(robot_3, HOME, robot_mutex_3); });
