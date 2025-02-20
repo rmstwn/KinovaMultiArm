@@ -14,6 +14,7 @@ CMakeFiles/KinovaMultiArm.dir/src/KinovaManager.cpp.o: /home/rama/Documents/cpp/
   /home/rama/Documents/cpp/KinovaMultiArm/kortex/include/client_stubs/ActuatorConfigClientRpc.h \
   /home/rama/Documents/cpp/KinovaMultiArm/kortex/include/client_stubs/BaseClientRpc.h \
   /home/rama/Documents/cpp/KinovaMultiArm/kortex/include/client_stubs/BaseCyclicClientRpc.h \
+  /home/rama/Documents/cpp/KinovaMultiArm/kortex/include/client_stubs/ControlConfigClientRpc.h \
   /home/rama/Documents/cpp/KinovaMultiArm/kortex/include/client_stubs/DeviceManagerClientRpc.h \
   /home/rama/Documents/cpp/KinovaMultiArm/kortex/include/client_stubs/InterconnectConfigClientRpc.h \
   /home/rama/Documents/cpp/KinovaMultiArm/kortex/include/client_stubs/SessionClientRpc.h \
@@ -72,6 +73,7 @@ CMakeFiles/KinovaMultiArm.dir/src/KinovaManager.cpp.o: /home/rama/Documents/cpp/
   /home/rama/Documents/cpp/KinovaMultiArm/kortex/include/messages/Base.pb.h \
   /home/rama/Documents/cpp/KinovaMultiArm/kortex/include/messages/BaseCyclic.pb.h \
   /home/rama/Documents/cpp/KinovaMultiArm/kortex/include/messages/Common.pb.h \
+  /home/rama/Documents/cpp/KinovaMultiArm/kortex/include/messages/ControlConfig.pb.h \
   /home/rama/Documents/cpp/KinovaMultiArm/kortex/include/messages/DeviceManager.pb.h \
   /home/rama/Documents/cpp/KinovaMultiArm/kortex/include/messages/Errors.pb.h \
   /home/rama/Documents/cpp/KinovaMultiArm/kortex/include/messages/Frame.pb.h \
@@ -323,6 +325,7 @@ CMakeFiles/KinovaMultiArm.dir/src/KinovaManager.cpp.o: /home/rama/Documents/cpp/
   /usr/include/x86_64-linux-gnu/bits/errno.h \
   /usr/include/x86_64-linux-gnu/bits/fcntl-linux.h \
   /usr/include/x86_64-linux-gnu/bits/fcntl.h \
+  /usr/include/x86_64-linux-gnu/bits/fcntl2.h \
   /usr/include/x86_64-linux-gnu/bits/floatn-common.h \
   /usr/include/x86_64-linux-gnu/bits/floatn.h \
   /usr/include/x86_64-linux-gnu/bits/flt-eval-method.h \
@@ -350,7 +353,9 @@ CMakeFiles/KinovaMultiArm.dir/src/KinovaManager.cpp.o: /home/rama/Documents/cpp/
   /usr/include/x86_64-linux-gnu/bits/pthreadtypes-arch.h \
   /usr/include/x86_64-linux-gnu/bits/pthreadtypes.h \
   /usr/include/x86_64-linux-gnu/bits/sched.h \
+  /usr/include/x86_64-linux-gnu/bits/select-decl.h \
   /usr/include/x86_64-linux-gnu/bits/select.h \
+  /usr/include/x86_64-linux-gnu/bits/select2.h \
   /usr/include/x86_64-linux-gnu/bits/setjmp.h \
   /usr/include/x86_64-linux-gnu/bits/sigaction.h \
   /usr/include/x86_64-linux-gnu/bits/sigcontext.h \
@@ -366,14 +371,22 @@ CMakeFiles/KinovaMultiArm.dir/src/KinovaManager.cpp.o: /home/rama/Documents/cpp/
   /usr/include/x86_64-linux-gnu/bits/sigthread.h \
   /usr/include/x86_64-linux-gnu/bits/sockaddr.h \
   /usr/include/x86_64-linux-gnu/bits/socket.h \
+  /usr/include/x86_64-linux-gnu/bits/socket2.h \
   /usr/include/x86_64-linux-gnu/bits/socket_type.h \
   /usr/include/x86_64-linux-gnu/bits/ss_flags.h \
   /usr/include/x86_64-linux-gnu/bits/stat.h \
   /usr/include/x86_64-linux-gnu/bits/stdint-intn.h \
   /usr/include/x86_64-linux-gnu/bits/stdint-least.h \
   /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h \
+  /usr/include/x86_64-linux-gnu/bits/stdio.h \
+  /usr/include/x86_64-linux-gnu/bits/stdio2-decl.h \
+  /usr/include/x86_64-linux-gnu/bits/stdio2.h \
   /usr/include/x86_64-linux-gnu/bits/stdio_lim.h \
+  /usr/include/x86_64-linux-gnu/bits/stdlib-bsearch.h \
   /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
+  /usr/include/x86_64-linux-gnu/bits/stdlib.h \
+  /usr/include/x86_64-linux-gnu/bits/string_fortified.h \
+  /usr/include/x86_64-linux-gnu/bits/strings_fortified.h \
   /usr/include/x86_64-linux-gnu/bits/struct_mutex.h \
   /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h \
   /usr/include/x86_64-linux-gnu/bits/struct_stat.h \
@@ -419,10 +432,14 @@ CMakeFiles/KinovaMultiArm.dir/src/KinovaManager.cpp.o: /home/rama/Documents/cpp/
   /usr/include/x86_64-linux-gnu/bits/typesizes.h \
   /usr/include/x86_64-linux-gnu/bits/uintn-identity.h \
   /usr/include/x86_64-linux-gnu/bits/uio_lim.h \
+  /usr/include/x86_64-linux-gnu/bits/unistd-decl.h \
+  /usr/include/x86_64-linux-gnu/bits/unistd.h \
   /usr/include/x86_64-linux-gnu/bits/unistd_ext.h \
   /usr/include/x86_64-linux-gnu/bits/waitflags.h \
   /usr/include/x86_64-linux-gnu/bits/waitstatus.h \
   /usr/include/x86_64-linux-gnu/bits/wchar.h \
+  /usr/include/x86_64-linux-gnu/bits/wchar2-decl.h \
+  /usr/include/x86_64-linux-gnu/bits/wchar2.h \
   /usr/include/x86_64-linux-gnu/bits/wctype-wchar.h \
   /usr/include/x86_64-linux-gnu/bits/wordsize.h \
   /usr/include/x86_64-linux-gnu/bits/xopen_lim.h \
@@ -779,13 +796,22 @@ CMakeFiles/KinovaMultiArm.dir/src/constants.cpp.o: /home/rama/Documents/cpp/Kino
   /usr/include/x86_64-linux-gnu/bits/pthreadtypes-arch.h \
   /usr/include/x86_64-linux-gnu/bits/pthreadtypes.h \
   /usr/include/x86_64-linux-gnu/bits/sched.h \
+  /usr/include/x86_64-linux-gnu/bits/select-decl.h \
   /usr/include/x86_64-linux-gnu/bits/select.h \
+  /usr/include/x86_64-linux-gnu/bits/select2.h \
   /usr/include/x86_64-linux-gnu/bits/setjmp.h \
   /usr/include/x86_64-linux-gnu/bits/stdint-intn.h \
   /usr/include/x86_64-linux-gnu/bits/stdint-least.h \
   /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h \
+  /usr/include/x86_64-linux-gnu/bits/stdio.h \
+  /usr/include/x86_64-linux-gnu/bits/stdio2-decl.h \
+  /usr/include/x86_64-linux-gnu/bits/stdio2.h \
   /usr/include/x86_64-linux-gnu/bits/stdio_lim.h \
+  /usr/include/x86_64-linux-gnu/bits/stdlib-bsearch.h \
   /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
+  /usr/include/x86_64-linux-gnu/bits/stdlib.h \
+  /usr/include/x86_64-linux-gnu/bits/string_fortified.h \
+  /usr/include/x86_64-linux-gnu/bits/strings_fortified.h \
   /usr/include/x86_64-linux-gnu/bits/struct_mutex.h \
   /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h \
   /usr/include/x86_64-linux-gnu/bits/thread-shared-types.h \
@@ -821,10 +847,14 @@ CMakeFiles/KinovaMultiArm.dir/src/constants.cpp.o: /home/rama/Documents/cpp/Kino
   /usr/include/x86_64-linux-gnu/bits/typesizes.h \
   /usr/include/x86_64-linux-gnu/bits/uintn-identity.h \
   /usr/include/x86_64-linux-gnu/bits/uio_lim.h \
+  /usr/include/x86_64-linux-gnu/bits/unistd-decl.h \
+  /usr/include/x86_64-linux-gnu/bits/unistd.h \
   /usr/include/x86_64-linux-gnu/bits/unistd_ext.h \
   /usr/include/x86_64-linux-gnu/bits/waitflags.h \
   /usr/include/x86_64-linux-gnu/bits/waitstatus.h \
   /usr/include/x86_64-linux-gnu/bits/wchar.h \
+  /usr/include/x86_64-linux-gnu/bits/wchar2-decl.h \
+  /usr/include/x86_64-linux-gnu/bits/wchar2.h \
   /usr/include/x86_64-linux-gnu/bits/wctype-wchar.h \
   /usr/include/x86_64-linux-gnu/bits/wordsize.h \
   /usr/include/x86_64-linux-gnu/bits/xopen_lim.h \
@@ -1189,13 +1219,22 @@ CMakeFiles/KinovaMultiArm.dir/src/fk_vereshchagin.cpp.o: /home/rama/Documents/cp
   /usr/include/x86_64-linux-gnu/bits/pthreadtypes-arch.h \
   /usr/include/x86_64-linux-gnu/bits/pthreadtypes.h \
   /usr/include/x86_64-linux-gnu/bits/sched.h \
+  /usr/include/x86_64-linux-gnu/bits/select-decl.h \
   /usr/include/x86_64-linux-gnu/bits/select.h \
+  /usr/include/x86_64-linux-gnu/bits/select2.h \
   /usr/include/x86_64-linux-gnu/bits/setjmp.h \
   /usr/include/x86_64-linux-gnu/bits/stdint-intn.h \
   /usr/include/x86_64-linux-gnu/bits/stdint-least.h \
   /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h \
+  /usr/include/x86_64-linux-gnu/bits/stdio.h \
+  /usr/include/x86_64-linux-gnu/bits/stdio2-decl.h \
+  /usr/include/x86_64-linux-gnu/bits/stdio2.h \
   /usr/include/x86_64-linux-gnu/bits/stdio_lim.h \
+  /usr/include/x86_64-linux-gnu/bits/stdlib-bsearch.h \
   /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
+  /usr/include/x86_64-linux-gnu/bits/stdlib.h \
+  /usr/include/x86_64-linux-gnu/bits/string_fortified.h \
+  /usr/include/x86_64-linux-gnu/bits/strings_fortified.h \
   /usr/include/x86_64-linux-gnu/bits/struct_mutex.h \
   /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h \
   /usr/include/x86_64-linux-gnu/bits/thread-shared-types.h \
@@ -1234,6 +1273,8 @@ CMakeFiles/KinovaMultiArm.dir/src/fk_vereshchagin.cpp.o: /home/rama/Documents/cp
   /usr/include/x86_64-linux-gnu/bits/waitflags.h \
   /usr/include/x86_64-linux-gnu/bits/waitstatus.h \
   /usr/include/x86_64-linux-gnu/bits/wchar.h \
+  /usr/include/x86_64-linux-gnu/bits/wchar2-decl.h \
+  /usr/include/x86_64-linux-gnu/bits/wchar2.h \
   /usr/include/x86_64-linux-gnu/bits/wctype-wchar.h \
   /usr/include/x86_64-linux-gnu/bits/wordsize.h \
   /usr/include/x86_64-linux-gnu/bits/xopen_lim.h \
@@ -1665,13 +1706,22 @@ CMakeFiles/KinovaMultiArm.dir/src/kdl_eigen_conversions.cpp.o: /home/rama/Docume
   /usr/include/x86_64-linux-gnu/bits/pthreadtypes-arch.h \
   /usr/include/x86_64-linux-gnu/bits/pthreadtypes.h \
   /usr/include/x86_64-linux-gnu/bits/sched.h \
+  /usr/include/x86_64-linux-gnu/bits/select-decl.h \
   /usr/include/x86_64-linux-gnu/bits/select.h \
+  /usr/include/x86_64-linux-gnu/bits/select2.h \
   /usr/include/x86_64-linux-gnu/bits/setjmp.h \
   /usr/include/x86_64-linux-gnu/bits/stdint-intn.h \
   /usr/include/x86_64-linux-gnu/bits/stdint-least.h \
   /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h \
+  /usr/include/x86_64-linux-gnu/bits/stdio.h \
+  /usr/include/x86_64-linux-gnu/bits/stdio2-decl.h \
+  /usr/include/x86_64-linux-gnu/bits/stdio2.h \
   /usr/include/x86_64-linux-gnu/bits/stdio_lim.h \
+  /usr/include/x86_64-linux-gnu/bits/stdlib-bsearch.h \
   /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
+  /usr/include/x86_64-linux-gnu/bits/stdlib.h \
+  /usr/include/x86_64-linux-gnu/bits/string_fortified.h \
+  /usr/include/x86_64-linux-gnu/bits/strings_fortified.h \
   /usr/include/x86_64-linux-gnu/bits/struct_mutex.h \
   /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h \
   /usr/include/x86_64-linux-gnu/bits/thread-shared-types.h \
@@ -1710,6 +1760,8 @@ CMakeFiles/KinovaMultiArm.dir/src/kdl_eigen_conversions.cpp.o: /home/rama/Docume
   /usr/include/x86_64-linux-gnu/bits/waitflags.h \
   /usr/include/x86_64-linux-gnu/bits/waitstatus.h \
   /usr/include/x86_64-linux-gnu/bits/wchar.h \
+  /usr/include/x86_64-linux-gnu/bits/wchar2-decl.h \
+  /usr/include/x86_64-linux-gnu/bits/wchar2.h \
   /usr/include/x86_64-linux-gnu/bits/wctype-wchar.h \
   /usr/include/x86_64-linux-gnu/bits/wordsize.h \
   /usr/include/x86_64-linux-gnu/bits/xopen_lim.h \
@@ -1782,6 +1834,7 @@ CMakeFiles/KinovaMultiArm.dir/src/main.cpp.o: /home/rama/Documents/cpp/KinovaMul
   /home/rama/Documents/cpp/KinovaMultiArm/kortex/include/client_stubs/ActuatorConfigClientRpc.h \
   /home/rama/Documents/cpp/KinovaMultiArm/kortex/include/client_stubs/BaseClientRpc.h \
   /home/rama/Documents/cpp/KinovaMultiArm/kortex/include/client_stubs/BaseCyclicClientRpc.h \
+  /home/rama/Documents/cpp/KinovaMultiArm/kortex/include/client_stubs/ControlConfigClientRpc.h \
   /home/rama/Documents/cpp/KinovaMultiArm/kortex/include/client_stubs/DeviceManagerClientRpc.h \
   /home/rama/Documents/cpp/KinovaMultiArm/kortex/include/client_stubs/InterconnectConfigClientRpc.h \
   /home/rama/Documents/cpp/KinovaMultiArm/kortex/include/client_stubs/SessionClientRpc.h \
@@ -1840,6 +1893,7 @@ CMakeFiles/KinovaMultiArm.dir/src/main.cpp.o: /home/rama/Documents/cpp/KinovaMul
   /home/rama/Documents/cpp/KinovaMultiArm/kortex/include/messages/Base.pb.h \
   /home/rama/Documents/cpp/KinovaMultiArm/kortex/include/messages/BaseCyclic.pb.h \
   /home/rama/Documents/cpp/KinovaMultiArm/kortex/include/messages/Common.pb.h \
+  /home/rama/Documents/cpp/KinovaMultiArm/kortex/include/messages/ControlConfig.pb.h \
   /home/rama/Documents/cpp/KinovaMultiArm/kortex/include/messages/DeviceManager.pb.h \
   /home/rama/Documents/cpp/KinovaMultiArm/kortex/include/messages/Errors.pb.h \
   /home/rama/Documents/cpp/KinovaMultiArm/kortex/include/messages/Frame.pb.h \
@@ -2283,6 +2337,7 @@ CMakeFiles/KinovaMultiArm.dir/src/main.cpp.o: /home/rama/Documents/cpp/KinovaMul
   /usr/include/x86_64-linux-gnu/bits/errno.h \
   /usr/include/x86_64-linux-gnu/bits/fcntl-linux.h \
   /usr/include/x86_64-linux-gnu/bits/fcntl.h \
+  /usr/include/x86_64-linux-gnu/bits/fcntl2.h \
   /usr/include/x86_64-linux-gnu/bits/floatn-common.h \
   /usr/include/x86_64-linux-gnu/bits/floatn.h \
   /usr/include/x86_64-linux-gnu/bits/flt-eval-method.h \
@@ -2310,7 +2365,9 @@ CMakeFiles/KinovaMultiArm.dir/src/main.cpp.o: /home/rama/Documents/cpp/KinovaMul
   /usr/include/x86_64-linux-gnu/bits/pthreadtypes-arch.h \
   /usr/include/x86_64-linux-gnu/bits/pthreadtypes.h \
   /usr/include/x86_64-linux-gnu/bits/sched.h \
+  /usr/include/x86_64-linux-gnu/bits/select-decl.h \
   /usr/include/x86_64-linux-gnu/bits/select.h \
+  /usr/include/x86_64-linux-gnu/bits/select2.h \
   /usr/include/x86_64-linux-gnu/bits/setjmp.h \
   /usr/include/x86_64-linux-gnu/bits/sigaction.h \
   /usr/include/x86_64-linux-gnu/bits/sigcontext.h \
@@ -2326,14 +2383,22 @@ CMakeFiles/KinovaMultiArm.dir/src/main.cpp.o: /home/rama/Documents/cpp/KinovaMul
   /usr/include/x86_64-linux-gnu/bits/sigthread.h \
   /usr/include/x86_64-linux-gnu/bits/sockaddr.h \
   /usr/include/x86_64-linux-gnu/bits/socket.h \
+  /usr/include/x86_64-linux-gnu/bits/socket2.h \
   /usr/include/x86_64-linux-gnu/bits/socket_type.h \
   /usr/include/x86_64-linux-gnu/bits/ss_flags.h \
   /usr/include/x86_64-linux-gnu/bits/stat.h \
   /usr/include/x86_64-linux-gnu/bits/stdint-intn.h \
   /usr/include/x86_64-linux-gnu/bits/stdint-least.h \
   /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h \
+  /usr/include/x86_64-linux-gnu/bits/stdio.h \
+  /usr/include/x86_64-linux-gnu/bits/stdio2-decl.h \
+  /usr/include/x86_64-linux-gnu/bits/stdio2.h \
   /usr/include/x86_64-linux-gnu/bits/stdio_lim.h \
+  /usr/include/x86_64-linux-gnu/bits/stdlib-bsearch.h \
   /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
+  /usr/include/x86_64-linux-gnu/bits/stdlib.h \
+  /usr/include/x86_64-linux-gnu/bits/string_fortified.h \
+  /usr/include/x86_64-linux-gnu/bits/strings_fortified.h \
   /usr/include/x86_64-linux-gnu/bits/struct_mutex.h \
   /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h \
   /usr/include/x86_64-linux-gnu/bits/struct_stat.h \
@@ -2389,10 +2454,14 @@ CMakeFiles/KinovaMultiArm.dir/src/main.cpp.o: /home/rama/Documents/cpp/KinovaMul
   /usr/include/x86_64-linux-gnu/bits/typesizes.h \
   /usr/include/x86_64-linux-gnu/bits/uintn-identity.h \
   /usr/include/x86_64-linux-gnu/bits/uio_lim.h \
+  /usr/include/x86_64-linux-gnu/bits/unistd-decl.h \
+  /usr/include/x86_64-linux-gnu/bits/unistd.h \
   /usr/include/x86_64-linux-gnu/bits/unistd_ext.h \
   /usr/include/x86_64-linux-gnu/bits/waitflags.h \
   /usr/include/x86_64-linux-gnu/bits/waitstatus.h \
   /usr/include/x86_64-linux-gnu/bits/wchar.h \
+  /usr/include/x86_64-linux-gnu/bits/wchar2-decl.h \
+  /usr/include/x86_64-linux-gnu/bits/wchar2.h \
   /usr/include/x86_64-linux-gnu/bits/wctype-wchar.h \
   /usr/include/x86_64-linux-gnu/bits/wordsize.h \
   /usr/include/x86_64-linux-gnu/bits/xopen_lim.h \
@@ -2623,7 +2692,9 @@ CMakeFiles/KinovaMultiArm.dir/src/oml_mrtu.cpp.o: /home/rama/Documents/cpp/Kinov
   /usr/include/x86_64-linux-gnu/bits/pthreadtypes-arch.h \
   /usr/include/x86_64-linux-gnu/bits/pthreadtypes.h \
   /usr/include/x86_64-linux-gnu/bits/sched.h \
+  /usr/include/x86_64-linux-gnu/bits/select-decl.h \
   /usr/include/x86_64-linux-gnu/bits/select.h \
+  /usr/include/x86_64-linux-gnu/bits/select2.h \
   /usr/include/x86_64-linux-gnu/bits/setjmp.h \
   /usr/include/x86_64-linux-gnu/bits/sigaction.h \
   /usr/include/x86_64-linux-gnu/bits/sigcontext.h \
@@ -2641,8 +2712,15 @@ CMakeFiles/KinovaMultiArm.dir/src/oml_mrtu.cpp.o: /home/rama/Documents/cpp/Kinov
   /usr/include/x86_64-linux-gnu/bits/stdint-intn.h \
   /usr/include/x86_64-linux-gnu/bits/stdint-least.h \
   /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h \
+  /usr/include/x86_64-linux-gnu/bits/stdio.h \
+  /usr/include/x86_64-linux-gnu/bits/stdio2-decl.h \
+  /usr/include/x86_64-linux-gnu/bits/stdio2.h \
   /usr/include/x86_64-linux-gnu/bits/stdio_lim.h \
+  /usr/include/x86_64-linux-gnu/bits/stdlib-bsearch.h \
   /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
+  /usr/include/x86_64-linux-gnu/bits/stdlib.h \
+  /usr/include/x86_64-linux-gnu/bits/string_fortified.h \
+  /usr/include/x86_64-linux-gnu/bits/strings_fortified.h \
   /usr/include/x86_64-linux-gnu/bits/struct_mutex.h \
   /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h \
   /usr/include/x86_64-linux-gnu/bits/thread-shared-types.h \
@@ -2685,10 +2763,14 @@ CMakeFiles/KinovaMultiArm.dir/src/oml_mrtu.cpp.o: /home/rama/Documents/cpp/Kinov
   /usr/include/x86_64-linux-gnu/bits/typesizes.h \
   /usr/include/x86_64-linux-gnu/bits/uintn-identity.h \
   /usr/include/x86_64-linux-gnu/bits/uio_lim.h \
+  /usr/include/x86_64-linux-gnu/bits/unistd-decl.h \
+  /usr/include/x86_64-linux-gnu/bits/unistd.h \
   /usr/include/x86_64-linux-gnu/bits/unistd_ext.h \
   /usr/include/x86_64-linux-gnu/bits/waitflags.h \
   /usr/include/x86_64-linux-gnu/bits/waitstatus.h \
   /usr/include/x86_64-linux-gnu/bits/wchar.h \
+  /usr/include/x86_64-linux-gnu/bits/wchar2-decl.h \
+  /usr/include/x86_64-linux-gnu/bits/wchar2.h \
   /usr/include/x86_64-linux-gnu/bits/wctype-wchar.h \
   /usr/include/x86_64-linux-gnu/bits/wordsize.h \
   /usr/include/x86_64-linux-gnu/bits/xopen_lim.h \
@@ -2928,7 +3010,33 @@ CMakeFiles/KinovaMultiArm.dir/src/oml_mrtu.cpp.o: /home/rama/Documents/cpp/Kinov
 
 /usr/include/eigen3/Eigen/src/Core/arch/Default/TypeCasting.h:
 
-/usr/include/c++/13/tr1/ell_integral.tcc:
+/usr/include/eigen3/Eigen/src/Core/arch/Default/GenericPacketMathFunctionsFwd.h:
+
+/usr/include/eigen3/Eigen/src/Core/arch/SSE/PacketMath.h:
+
+/usr/include/eigen3/Eigen/src/Core/arch/Default/GenericPacketMathFunctions.h:
+
+/usr/include/eigen3/Eigen/src/Core/arch/Default/BFloat16.h:
+
+/usr/include/eigen3/Eigen/src/Core/VectorwiseOp.h:
+
+/usr/include/eigen3/Eigen/src/Core/VectorBlock.h:
+
+/usr/include/eigen3/Eigen/src/Core/TriangularMatrix.h:
+
+/usr/include/eigen3/Eigen/src/Core/Transpositions.h:
+
+/usr/include/eigen3/Eigen/src/Core/Transpose.h:
+
+/usr/include/eigen3/Eigen/src/QR/HouseholderQR.h:
+
+/usr/include/eigen3/Eigen/src/Core/Stride.h:
+
+/usr/include/eigen3/Eigen/src/Core/StlIterators.h:
+
+/usr/include/eigen3/Eigen/src/Core/StableNorm.h:
+
+/usr/include/eigen3/Eigen/src/Core/SolverBase.h:
 
 /usr/include/c++/13/string_view:
 
@@ -2948,7 +3056,9 @@ CMakeFiles/KinovaMultiArm.dir/src/oml_mrtu.cpp.o: /home/rama/Documents/cpp/Kinov
 
 /usr/include/c++/13/istream:
 
-/usr/include/c++/13/initializer_list:
+/usr/include/eigen3/Eigen/src/Core/Visitor.h:
+
+/usr/include/c++/13/bits/std_thread.h:
 
 /usr/local/include/kdl/utilities/traits.h:
 
@@ -2960,10 +3070,6 @@ CMakeFiles/KinovaMultiArm.dir/src/oml_mrtu.cpp.o: /home/rama/Documents/cpp/Kinov
 
 /usr/include/c++/13/pstl/glue_algorithm_defs.h:
 
-/usr/include/c++/13/bits/std_thread.h:
-
-/usr/include/eigen3/Eigen/src/Core/Visitor.h:
-
 /usr/include/c++/13/new:
 
 /usr/include/c++/13/cwchar:
@@ -2971,6 +3077,8 @@ CMakeFiles/KinovaMultiArm.dir/src/oml_mrtu.cpp.o: /home/rama/Documents/cpp/Kinov
 /usr/include/x86_64-linux-gnu/c++/13/bits/messages_members.h:
 
 /usr/include/x86_64-linux-gnu/sys/select.h:
+
+/usr/include/x86_64-linux-gnu/bits/select2.h:
 
 /usr/include/c++/13/climits:
 
@@ -2982,19 +3090,11 @@ CMakeFiles/KinovaMultiArm.dir/src/oml_mrtu.cpp.o: /home/rama/Documents/cpp/Kinov
 
 /usr/include/c++/13/future:
 
-/usr/include/eigen3/Eigen/src/Core/CoreEvaluators.h:
-
 /usr/include/c++/13/bits/vector.tcc:
 
 /usr/include/c++/13/bits/uniform_int_dist.h:
 
 /usr/include/c++/13/bits/locale_classes.tcc:
-
-/usr/local/include/kdl/jntarrayvel.hpp:
-
-/usr/include/c++/13/cerrno:
-
-/usr/include/c++/13/bits/stringfwd.h:
 
 /home/rama/Documents/cpp/KinovaMultiArm/kortex/include/google/protobuf/map_field_lite.h:
 
@@ -3013,6 +3113,10 @@ CMakeFiles/KinovaMultiArm.dir/src/oml_mrtu.cpp.o: /home/rama/Documents/cpp/Kinov
 /usr/include/c++/13/bits/stl_tempbuf.h:
 
 /usr/include/c++/13/bits/stl_set.h:
+
+/usr/include/eigen3/Eigen/src/Core/Swap.h:
+
+/usr/include/c++/13/bits/stl_raw_storage_iter.h:
 
 /home/rama/Documents/cpp/KinovaMultiArm/kortex/include/messages/Frame.pb.h:
 
@@ -3036,17 +3140,11 @@ CMakeFiles/KinovaMultiArm.dir/src/oml_mrtu.cpp.o: /home/rama/Documents/cpp/Kinov
 
 /usr/include/c++/13/utility:
 
-/usr/include/c++/13/tr1/beta_function.tcc:
-
 /usr/include/c++/13/bits/utility.h:
 
 /usr/include/c++/13/bits/stl_function.h:
 
 /usr/include/c++/13/bits/stl_deque.h:
-
-/usr/include/eigen3/Eigen/src/Core/arch/SSE/PacketMath.h:
-
-/usr/include/eigen3/Eigen/src/Core/arch/Default/GenericPacketMathFunctions.h:
 
 /usr/include/c++/13/bits/stl_algobase.h:
 
@@ -3072,6 +3170,8 @@ CMakeFiles/KinovaMultiArm.dir/src/oml_mrtu.cpp.o: /home/rama/Documents/cpp/Kinov
 
 /usr/include/linux/posix_types.h:
 
+/usr/include/x86_64-linux-gnu/bits/stdio2-decl.h:
+
 /usr/include/c++/13/iosfwd:
 
 /usr/include/c++/13/condition_variable:
@@ -3079,10 +3179,6 @@ CMakeFiles/KinovaMultiArm.dir/src/oml_mrtu.cpp.o: /home/rama/Documents/cpp/Kinov
 /usr/include/wchar.h:
 
 /usr/include/x86_64-linux-gnu/bits/stdlib-float.h:
-
-/usr/include/linux/errno.h:
-
-/usr/include/c++/13/bits/std_abs.h:
 
 /usr/include/eigen3/Eigen/src/Core/DiagonalMatrix.h:
 
@@ -3104,11 +3200,7 @@ CMakeFiles/KinovaMultiArm.dir/src/oml_mrtu.cpp.o: /home/rama/Documents/cpp/Kinov
 
 /usr/include/c++/13/bits/locale_facets.tcc:
 
-/usr/local/include/zmq.hpp:
-
-/home/rama/Documents/cpp/KinovaMultiArm/kortex/include/google/protobuf/stubs/callback.h:
-
-/usr/include/c++/13/bits/locale_facets.h:
+/usr/include/x86_64-linux-gnu/bits/fcntl2.h:
 
 /usr/include/x86_64-linux-gnu/bits/timesize.h:
 
@@ -3156,15 +3248,11 @@ CMakeFiles/KinovaMultiArm.dir/src/oml_mrtu.cpp.o: /home/rama/Documents/cpp/Kinov
 
 /usr/include/x86_64-linux-gnu/bits/param.h:
 
-/usr/include/eigen3/Eigen/src/Core/VectorwiseOp.h:
-
 /usr/include/x86_64-linux-gnu/bits/socket_type.h:
 
 /usr/include/c++/13/bits/stl_pair.h:
 
 /usr/include/x86_64-linux-gnu/bits/errno.h:
-
-/usr/include/eigen3/Eigen/src/Core/Transpositions.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/__sigset_t.h:
 
@@ -3234,6 +3322,12 @@ CMakeFiles/KinovaMultiArm.dir/src/oml_mrtu.cpp.o: /home/rama/Documents/cpp/Kinov
 
 /home/rama/Documents/cpp/KinovaMultiArm/kortex/include/google/protobuf/util/type_resolver.h:
 
+/usr/include/linux/errno.h:
+
+/usr/include/c++/13/bits/std_abs.h:
+
+/usr/include/x86_64-linux-gnu/bits/wchar2-decl.h:
+
 /usr/include/c++/13/bits/uses_allocator.h:
 
 /usr/include/c++/13/bits/ostream_insert.h:
@@ -3284,6 +3378,28 @@ CMakeFiles/KinovaMultiArm.dir/src/oml_mrtu.cpp.o: /home/rama/Documents/cpp/Kinov
 
 /usr/include/x86_64-linux-gnu/bits/types/__fpos64_t.h:
 
+/usr/local/include/kdl/jntarrayvel.hpp:
+
+/usr/include/c++/13/bits/stringfwd.h:
+
+/usr/include/c++/13/cerrno:
+
+/usr/local/include/zmq.hpp:
+
+/usr/include/c++/13/bits/locale_facets.h:
+
+/home/rama/Documents/cpp/KinovaMultiArm/kortex/include/google/protobuf/stubs/callback.h:
+
+/usr/include/eigen3/Eigen/src/Core/CoreEvaluators.h:
+
+/home/rama/Documents/cpp/KinovaMultiArm/kortex/include/client_stubs/ControlConfigClientRpc.h:
+
+/usr/include/limits.h:
+
+/usr/include/c++/13/cstdlib:
+
+/usr/include/eigen3/Eigen/src/Core/PermutationMatrix.h:
+
 /home/rama/Documents/cpp/KinovaMultiArm/kortex/include/client_stubs/InterconnectConfigClientRpc.h:
 
 /home/rama/Documents/cpp/KinovaMultiArm/include/state_specification.hpp:
@@ -3332,21 +3448,11 @@ CMakeFiles/KinovaMultiArm.dir/src/oml_mrtu.cpp.o: /home/rama/Documents/cpp/Kinov
 
 /usr/include/eigen3/Eigen/src/Core/Random.h:
 
-/usr/include/limits.h:
-
-/usr/include/c++/13/cstdlib:
-
-/usr/include/eigen3/Eigen/src/Core/PermutationMatrix.h:
-
 /usr/include/c++/13/cstdint:
 
 /usr/include/c++/13/bits/std_function.h:
 
 /usr/include/c++/13/bits/char_traits.h:
-
-/usr/include/c++/13/queue:
-
-/usr/include/x86_64-linux-gnu/c++/13/bits/ctype_inline.h:
 
 /home/rama/Documents/cpp/KinovaMultiArm/kortex/include/google/protobuf/metadata_lite.h:
 
@@ -3357,8 +3463,6 @@ CMakeFiles/KinovaMultiArm.dir/src/oml_mrtu.cpp.o: /home/rama/Documents/cpp/Kinov
 /usr/include/c++/13/bits/alloc_traits.h:
 
 /usr/include/eigen3/Eigen/src/Core/IndexedView.h:
-
-/usr/include/eigen3/Eigen/src/Core/arch/Default/GenericPacketMathFunctionsFwd.h:
 
 /usr/include/eigen3/Eigen/src/Core/products/SelfadjointRank2Update.h:
 
@@ -3376,17 +3480,11 @@ CMakeFiles/KinovaMultiArm.dir/src/oml_mrtu.cpp.o: /home/rama/Documents/cpp/Kinov
 
 /home/rama/Documents/cpp/KinovaMultiArm/kortex/include/google/protobuf/generated_enum_util.h:
 
-/usr/include/eigen3/Eigen/src/QR/HouseholderQR.h:
-
-/usr/include/eigen3/Eigen/src/Core/Stride.h:
+/usr/include/x86_64-linux-gnu/bits/stdio.h:
 
 /usr/include/c++/13/bits/nested_exception.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/cookie_io_functions_t.h:
-
-/usr/include/c++/13/bits/stl_raw_storage_iter.h:
-
-/usr/include/eigen3/Eigen/src/Core/Swap.h:
 
 /home/rama/Documents/cpp/KinovaMultiArm/kortex/include/client/ITransportClient.h:
 
@@ -3409,14 +3507,6 @@ CMakeFiles/KinovaMultiArm.dir/src/oml_mrtu.cpp.o: /home/rama/Documents/cpp/Kinov
 /usr/include/c++/13/bits/postypes.h:
 
 /usr/include/c++/13/pstl/execution_defs.h:
-
-/usr/include/c++/13/bits/stl_bvector.h:
-
-/usr/include/c++/13/bits/allocator.h:
-
-/usr/include/eigen3/Eigen/src/Core/PlainObjectBase.h:
-
-/usr/include/c++/13/unordered_map:
 
 /usr/include/c++/13/bits/string_view.tcc:
 
@@ -3482,6 +3572,14 @@ CMakeFiles/KinovaMultiArm.dir/src/oml_mrtu.cpp.o: /home/rama/Documents/cpp/Kinov
 
 /home/rama/Documents/cpp/KinovaMultiArm/kortex/include/client_stubs/BaseCyclicClientRpc.h:
 
+/usr/include/c++/13/bits/stl_bvector.h:
+
+/usr/include/c++/13/bits/allocator.h:
+
+/usr/include/eigen3/Eigen/src/Core/PlainObjectBase.h:
+
+/usr/include/c++/13/unordered_map:
+
 /usr/include/c++/13/mutex:
 
 /usr/include/c++/13/bits/unique_lock.h:
@@ -3503,8 +3601,6 @@ CMakeFiles/KinovaMultiArm.dir/src/oml_mrtu.cpp.o: /home/rama/Documents/cpp/Kinov
 /usr/include/eigen3/Eigen/src/Core/ArrayBase.h:
 
 /home/rama/Documents/cpp/KinovaMultiArm/kortex/include/messages/Base.pb.h:
-
-/usr/include/c++/13/bits/unordered_set.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/__sigval_t.h:
 
@@ -3534,6 +3630,12 @@ CMakeFiles/KinovaMultiArm.dir/src/oml_mrtu.cpp.o: /home/rama/Documents/cpp/Kinov
 
 /home/rama/Documents/cpp/KinovaMultiArm/kortex/include/messages/ProductConfiguration.pb.h:
 
+/home/rama/Documents/cpp/KinovaMultiArm/kortex/include/messages/ControlConfig.pb.h:
+
+/usr/include/x86_64-linux-gnu/bits/long-double.h:
+
+/usr/include/x86_64-linux-gnu/bits/socket.h:
+
 /usr/include/c++/13/iostream:
 
 /usr/include/asm-generic/errno.h:
@@ -3548,9 +3650,9 @@ CMakeFiles/KinovaMultiArm.dir/src/oml_mrtu.cpp.o: /home/rama/Documents/cpp/Kinov
 
 /usr/include/eigen3/Eigen/src/Core/DenseBase.h:
 
-/home/rama/Documents/cpp/KinovaMultiArm/kortex/include/google/protobuf/generated_message_table_driven.h:
-
 /usr/include/c++/13/bits/invoke.h:
+
+/home/rama/Documents/cpp/KinovaMultiArm/kortex/include/google/protobuf/generated_message_table_driven.h:
 
 /usr/include/eigen3/Eigen/src/Core/GenericPacketMath.h:
 
@@ -3580,8 +3682,6 @@ CMakeFiles/KinovaMultiArm.dir/src/oml_mrtu.cpp.o: /home/rama/Documents/cpp/Kinov
 
 /usr/include/c++/13/bits/atomic_base.h:
 
-/usr/include/eigen3/Eigen/src/Core/StableNorm.h:
-
 /usr/include/c++/13/bits/concept_check.h:
 
 /usr/include/c++/13/sstream:
@@ -3596,19 +3696,19 @@ CMakeFiles/KinovaMultiArm.dir/src/oml_mrtu.cpp.o: /home/rama/Documents/cpp/Kinov
 
 /usr/include/c++/13/bits/basic_ios.tcc:
 
+/usr/include/c++/13/bits/hashtable_policy.h:
+
 /home/rama/Documents/cpp/KinovaMultiArm/kortex/include/google/protobuf/unknown_field_set.h:
 
 /usr/include/c++/13/bits/cxxabi_init_exception.h:
 
 /home/rama/Documents/cpp/KinovaMultiArm/kortex/include/messages/Errors.pb.h:
 
-/usr/include/eigen3/Eigen/src/Core/arch/Default/Half.h:
-
 /usr/include/eigen3/Eigen/src/Core/arch/Default/Settings.h:
 
-/usr/include/c++/13/bits/exception.h:
+/usr/include/eigen3/Eigen/src/Core/arch/Default/Half.h:
 
-/usr/include/c++/13/bits/hashtable_policy.h:
+/usr/include/c++/13/bits/exception.h:
 
 /usr/include/c++/13/bits/stream_iterator.h:
 
@@ -3630,7 +3730,9 @@ CMakeFiles/KinovaMultiArm.dir/src/oml_mrtu.cpp.o: /home/rama/Documents/cpp/Kinov
 
 /usr/include/c++/13/bits/istream.tcc:
 
-/usr/include/eigen3/Eigen/src/Core/VectorBlock.h:
+/usr/include/c++/13/tr1/beta_function.tcc:
+
+/usr/include/c++/13/tr1/ell_integral.tcc:
 
 /usr/include/c++/13/tr1/gamma.tcc:
 
@@ -3690,9 +3792,9 @@ CMakeFiles/KinovaMultiArm.dir/src/oml_mrtu.cpp.o: /home/rama/Documents/cpp/Kinov
 
 /usr/include/x86_64-linux-gnu/bits/in.h:
 
-/usr/include/x86_64-linux-gnu/bits/mathcalls-narrow.h:
-
 /usr/include/linux/param.h:
+
+/usr/include/x86_64-linux-gnu/bits/socket2.h:
 
 /usr/include/linux/stddef.h:
 
@@ -3711,8 +3813,6 @@ CMakeFiles/KinovaMultiArm.dir/src/oml_mrtu.cpp.o: /home/rama/Documents/cpp/Kinov
 /usr/include/eigen3/Eigen/src/Core/SelfAdjointView.h:
 
 /usr/include/pthread.h:
-
-/usr/include/eigen3/Eigen/src/Core/StlIterators.h:
 
 /usr/include/rpc/netdb.h:
 
@@ -3788,9 +3888,7 @@ CMakeFiles/KinovaMultiArm.dir/src/oml_mrtu.cpp.o: /home/rama/Documents/cpp/Kinov
 
 /usr/include/x86_64-linux-gnu/bits/fp-logb.h:
 
-/usr/include/c++/13/bits/stl_vector.h:
-
-/usr/include/x86_64-linux-gnu/bits/getopt_core.h:
+/usr/include/x86_64-linux-gnu/bits/wchar2.h:
 
 /usr/include/linux/limits.h:
 
@@ -3834,6 +3932,14 @@ CMakeFiles/KinovaMultiArm.dir/src/oml_mrtu.cpp.o: /home/rama/Documents/cpp/Kinov
 
 /usr/include/x86_64-linux-gnu/bits/sched.h:
 
+/usr/include/c++/13/queue:
+
+/usr/include/x86_64-linux-gnu/c++/13/bits/ctype_inline.h:
+
+/usr/include/x86_64-linux-gnu/bits/select-decl.h:
+
+/usr/include/eigen3/Eigen/src/Core/CwiseUnaryOp.h:
+
 /usr/include/x86_64-linux-gnu/bits/time.h:
 
 /usr/include/arpa/inet.h:
@@ -3868,13 +3974,7 @@ CMakeFiles/KinovaMultiArm.dir/src/oml_mrtu.cpp.o: /home/rama/Documents/cpp/Kinov
 
 /usr/include/x86_64-linux-gnu/bits/sigthread.h:
 
-/usr/include/eigen3/Eigen/src/Core/TriangularMatrix.h:
-
 /usr/include/x86_64-linux-gnu/bits/sockaddr.h:
-
-/usr/include/x86_64-linux-gnu/bits/long-double.h:
-
-/usr/include/x86_64-linux-gnu/bits/socket.h:
 
 /usr/include/x86_64-linux-gnu/bits/ss_flags.h:
 
@@ -3889,6 +3989,36 @@ CMakeFiles/KinovaMultiArm.dir/src/oml_mrtu.cpp.o: /home/rama/Documents/cpp/Kinov
 /usr/include/x86_64-linux-gnu/bits/select.h:
 
 /usr/include/x86_64-linux-gnu/c++/13/bits/gthr-default.h:
+
+/usr/include/c++/13/bits/unordered_set.h:
+
+/usr/include/x86_64-linux-gnu/bits/stdio2.h:
+
+/usr/include/eigen3/Eigen/src/Core/arch/Default/ConjHelper.h:
+
+/usr/include/eigen3/Eigen/src/Core/PartialReduxEvaluator.h:
+
+/usr/include/x86_64-linux-gnu/bits/timex.h:
+
+/usr/include/x86_64-linux-gnu/bits/mathcalls-narrow.h:
+
+/usr/include/x86_64-linux-gnu/bits/stdlib-bsearch.h:
+
+/usr/include/x86_64-linux-gnu/bits/types/clockid_t.h:
+
+/usr/include/x86_64-linux-gnu/bits/types/struct___jmp_buf_tag.h:
+
+/usr/include/c++/13/bits/stl_vector.h:
+
+/usr/include/x86_64-linux-gnu/bits/getopt_core.h:
+
+/usr/include/x86_64-linux-gnu/bits/stdlib.h:
+
+/usr/include/c++/13/initializer_list:
+
+/usr/include/x86_64-linux-gnu/bits/string_fortified.h:
+
+/usr/include/x86_64-linux-gnu/bits/strings_fortified.h:
 
 /usr/include/x86_64-linux-gnu/bits/struct_mutex.h:
 
@@ -3932,10 +4062,6 @@ CMakeFiles/KinovaMultiArm.dir/src/oml_mrtu.cpp.o: /home/rama/Documents/cpp/Kinov
 
 /usr/lib/gcc/x86_64-linux-gnu/13/include/syslimits.h:
 
-/usr/include/x86_64-linux-gnu/bits/types/clockid_t.h:
-
-/usr/include/x86_64-linux-gnu/bits/types/struct___jmp_buf_tag.h:
-
 /usr/include/c++/13/bits/list.tcc:
 
 /usr/include/features-time64.h:
@@ -3969,6 +4095,10 @@ CMakeFiles/KinovaMultiArm.dir/src/oml_mrtu.cpp.o: /home/rama/Documents/cpp/Kinov
 /usr/include/x86_64-linux-gnu/bits/types/timer_t.h:
 
 /usr/include/x86_64-linux-gnu/bits/typesizes.h:
+
+/usr/include/x86_64-linux-gnu/bits/unistd-decl.h:
+
+/usr/include/x86_64-linux-gnu/bits/unistd.h:
 
 /usr/include/x86_64-linux-gnu/bits/unistd_ext.h:
 
@@ -4096,8 +4226,6 @@ CMakeFiles/KinovaMultiArm.dir/src/oml_mrtu.cpp.o: /home/rama/Documents/cpp/Kinov
 
 /usr/include/eigen3/Eigen/src/Core/CwiseNullaryOp.h:
 
-/usr/include/eigen3/Eigen/src/Core/CwiseUnaryOp.h:
-
 /usr/include/eigen3/Eigen/src/Core/CwiseUnaryView.h:
 
 /home/rama/Documents/cpp/KinovaMultiArm/kortex/include/google/protobuf/stubs/fastmem.h:
@@ -4127,15 +4255,3 @@ CMakeFiles/KinovaMultiArm.dir/src/oml_mrtu.cpp.o: /home/rama/Documents/cpp/Kinov
 /usr/local/include/kdl/rigidbodyinertia.hpp:
 
 /usr/include/eigen3/Eigen/src/Core/Reshaped.h:
-
-/usr/include/eigen3/Eigen/src/Core/SolverBase.h:
-
-/usr/include/eigen3/Eigen/src/Core/Transpose.h:
-
-/usr/include/eigen3/Eigen/src/Core/arch/Default/BFloat16.h:
-
-/usr/include/eigen3/Eigen/src/Core/PartialReduxEvaluator.h:
-
-/usr/include/x86_64-linux-gnu/bits/timex.h:
-
-/usr/include/eigen3/Eigen/src/Core/arch/Default/ConjHelper.h:

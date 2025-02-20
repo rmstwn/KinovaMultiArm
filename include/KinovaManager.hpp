@@ -15,6 +15,8 @@
 #include <RouterClient.h>
 #include <TransportClientTcp.h>
 #include <TransportClientUdp.h>
+#include <ControlConfigClientRpc.h>
+
 
 #include <google/protobuf/util/json_util.h>
 
@@ -51,6 +53,7 @@ private:
     Kinova::Api::SessionManager *session_manager_;
     Kinova::Api::Base::BaseClient *base_;
     Kinova::Api::BaseCyclic::BaseCyclicClient *base_cyclic_;
+    Kinova::Api::ControlConfig::ControlConfigClient *control_config_;
 
     Kinova::Api::Base::ServoingModeInformation servoing_mode_;
 

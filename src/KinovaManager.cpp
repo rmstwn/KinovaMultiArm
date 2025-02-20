@@ -44,7 +44,7 @@ std::function<void(Kinova::Api::Base::ActionNotification)> create_event_listener
 
 KinovaManager::KinovaManager(const std::string &ip_address, int port)
     : is_connected_(false), connection_established_(false), ip_address_(ip_address), port_(port), transport_(nullptr), router_(nullptr),
-      session_manager_(nullptr), base_(nullptr), base_cyclic_(nullptr)
+      session_manager_(nullptr), control_config_(nullptr), base_(nullptr), base_cyclic_(nullptr)
 {
     // error_callback_ = [](Kinova::Api::KError err)
     // {
@@ -94,7 +94,23 @@ void KinovaManager::setupConnection()
     session_manager_ = new Kinova::Api::SessionManager(router_);
     session_manager_->CreateSession(create_session_info);
 
-    std::cout << "Kinova sessions created" << std::endl;
+    control_config_ = new Kinova::Api::ControlConfig::ControlConfigClient(router_);
+    // auto gravityVector = new Kinova::Api::ControlConfig::GravityVector();
+
+    // gravityVector->set_x(0.0);
+    // gravityVector->set_y(0.0);
+    // gravityVector->set_z(9.81);
+
+    // gravityVector->x();
+    // gravityVector->y();
+    // gravityVector->z();
+
+    // control_config_->GetGravityVector();
+
+    // std::cout << gravityVector << std::endl;
+    
+    std::cout
+        << "Kinova sessions created" << std::endl;
 
     // Clearing faults
     try
@@ -292,6 +308,7 @@ void KinovaManager::stopConnection()
     delete base_cyclic_;
     delete router_;
     delete transport_;
+    delete control_config_;
 
     session_manager_ = nullptr;
     base_ = nullptr;
@@ -326,55 +343,70 @@ int KinovaManager::stop_robot_motion()
     return 0;
 }
 
+
 int KinovaManager::gripper(float target_position, int64_t time)
 {
+    // Initialize gripper command
     Kinova::Api::Base::GripperCommand gripper_command_;
     gripper_command_.set_mode(Kinova::Api::Base::GRIPPER_POSITION);
-
+    
+    // Set the initial position of the gripper to a known state (finger 1)
     auto finger_ = gripper_command_.mutable_gripper()->add_finger();
     finger_->set_finger_identifier(1);
-    finger_->set_value(0);  // Initialize gripper to a known position
+    finger_->set_value(0); // Set initial position to 0 (open)
+    
+    // Send the initial gripper position
     base_->SendGripperCommand(gripper_command_);
-
     std::this_thread::sleep_for(std::chrono::milliseconds(time));  // Wait for initialization
 
     // Move the gripper to the target position
     gripper_command_.set_mode(Kinova::Api::Base::GRIPPER_POSITION);
     finger_->set_value(target_position);
     base_->SendGripperCommand(gripper_command_);
+    std::cout << "⏳ Moving gripper to target position: " << target_position << std::endl;
 
-    // Feedback to check if the gripper has moved to the target position
+    // Feedback loop to check gripper position
     Kinova::Api::Base::Gripper gripper_feedback;
     Kinova::Api::Base::GripperRequest gripper_request;
     bool is_motion_completed = false;
-    
-    // Set the request mode to position to get feedback
+
+    // Set the request mode to position for feedback
     gripper_request.set_mode(Kinova::Api::Base::GRIPPER_POSITION);
-    
+
+    // Continue to check feedback until the gripper reaches the target position or time-out
     while (!is_motion_completed)
     {
         float position_ = 0.0f;
-        
-        // Get feedback about the gripper's current position
+
+        // Get the feedback on gripper position
         gripper_feedback = base_->GetMeasuredGripperMovement(gripper_request);
 
-        // Check if the finger size is available and fetch its value
-        if (gripper_feedback.finger_size())
+        // Ensure the finger position is available in the feedback
+        if (gripper_feedback.finger_size() > 0)
         {
             position_ = gripper_feedback.finger(0).value();
-            cout << "Reported position: " << position_ << std::endl;
+            std::cout << "Reported position: " << position_ << std::endl;
+        }
+        else
+        {
+            std::cerr << "❌ Gripper feedback not available!" << std::endl;
+            return -1;
         }
 
-        // Check if the gripper has moved close enough to the target position
-        if (abs(position_ - target_position) <= 0.01)  // Tolerance threshold (adjust as necessary)
+        // Check if the gripper position is within tolerance of the target
+        if (std::abs(position_ - target_position) <= 0.05)  // Tolerance threshold of 0.05
         {
             is_motion_completed = true;
+            std::cout << "✅ Gripper has reached the target position: " << target_position << std::endl;
+        }
+        else
+        {
+            std::cout << "🔄 Gripper is still moving. Current position: " << position_ << std::endl;
         }
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(50));  // Short delay before re-checking the position
+        // Wait before re-checking
+        std::this_thread::sleep_for(std::chrono::milliseconds(50));
     }
 
-    cout << "Gripper has reached the target position: " << target_position << std::endl;
-
-    return 0;
+    return 0;  // Success
 }
