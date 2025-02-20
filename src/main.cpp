@@ -762,15 +762,19 @@ int main()
          [&]()
          { move_robot(kinova_2, PACKAGING, kinova_mutex_2); }},
 
-        {[&]()
-         { move_robot(kinova_1, HOME, kinova_mutex_1); },
-         [&]()
-         { move_robot(kinova_2, HOME, kinova_mutex_2); }},
+        // {[&]()
+        //  { goToTable(motor1, motor2, 500.0, 5000, motor3, 0.0, 2000, 1); },
+        //  [&]()
+        //  { move_robot(kinova_1, HOME, kinova_mutex_1); },
+        //  [&]()
+        //  { move_robot(kinova_2, HOME, kinova_mutex_2); }},
 
-        {[&]()
-         { control_gripper(kinova_1, 0.9, 10); },
-         [&]()
-         { control_gripper(kinova_2, 0.9, 10); }},
+        // {[&]()
+        //  { goToTable(motor1, motor2, 500.0, 5000, motor3, 20.0, 2000, 1); },
+        //  [&]()
+        //  { control_gripper(kinova_1, 0.9, 10); },
+        //  [&]()
+        //  { control_gripper(kinova_2, 0.9, 10); }},
 
     };
 
