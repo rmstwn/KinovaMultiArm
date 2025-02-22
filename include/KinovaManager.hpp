@@ -29,7 +29,9 @@ public:
     virtual bool is_connected();
 
     int go_to(const int desired_pose);
-    int go_to_cart(double speed_linear, double speed_angular, const int desired_pose);
+    // int go_to_cart(double speed_linear, double speed_angular, const int desired_pose);
+    int go_to_cart(double speed_linear, double speed_angular, const std::vector<double> &desired_pose);
+
 
     int gripper(float target_position, int64_t time);
 
@@ -39,10 +41,15 @@ public:
     virtual int stop_robot_motion();
 
 private:
-    void executePoseMovement(const std::vector<double> &configuration_array);
+    // void executePoseMovement(const std::vector<double> &configuration_array);
     // void executeCartesianMovement(const std::vector<double> &desired_ee_pose, const std::vector<double> &speed);
+    // void executeCartesianMovement(const std::vector<double> &desired_ee_pose, double &speed_linear, double &speed_angular);
+
+    void executePoseMovement(const std::vector<double> &configuration_array);
     void executeCartesianMovement(const std::vector<double> &desired_ee_pose, double &speed_linear, double &speed_angular);
 
+
+    
     bool is_connected_;
     bool connection_established_;
 

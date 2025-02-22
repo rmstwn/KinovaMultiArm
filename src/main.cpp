@@ -91,11 +91,13 @@ enum desired_pose
     CANDLE = 0,
     HOME = 1,
     RETRACT = 2,
-    PACKAGING = 3,
+    PACKAGING_1 = 31,
+    PACKAGING_2 = 32,
     HOME_FORWARD = 4,
     HOME_BACK = 5,
     APPROACH_TABLE = 6,
     TEST = 7,
+    MOVING = 8,
     BLANKET_1 = 10,
     BLANKET_2 = 11,
     BLANKET_3 = 12,
@@ -192,32 +194,32 @@ bool moveTable(ModbusAZ &motor1, ModbusAZ &motor2, double distance_mm, int speed
         return false;
     }
 
-    while (true)
-    {
-        std::vector<int> positionVec1 = motor1.readPosition();
-        std::vector<int> positionVec2 = motor2.readPosition();
-        if (positionVec1.empty() || positionVec2.empty())
-        {
-            std::cerr << "❌ Failed to read position for motor(s) during movement." << std::endl;
-            return false;
-        }
+    // while (true)
+    // {
+    //     std::vector<int> positionVec1 = motor1.readPosition();
+    //     std::vector<int> positionVec2 = motor2.readPosition();
+    //     if (positionVec1.empty() || positionVec2.empty())
+    //     {
+    //         std::cerr << "❌ Failed to read position for motor(s) during movement." << std::endl;
+    //         return false;
+    //     }
 
-        int currentPosition1 = positionVec1[1];
-        int currentPosition2 = positionVec2[1];
+    //     int currentPosition1 = positionVec1[1];
+    //     int currentPosition2 = positionVec2[1];
 
-        std::cout << "pulses: " << pulses << std::endl;
+    //     std::cout << "pulses: " << pulses << std::endl;
 
-        std::cout << "Position motor 1: " << currentPosition1 << std::endl;
-        std::cout << "Position motor 2: " << currentPosition1 << std::endl;
+    //     std::cout << "Position motor 1: " << currentPosition1 << std::endl;
+    //     std::cout << "Position motor 2: " << currentPosition1 << std::endl;
 
-        if (currentPosition1 == pulses && currentPosition2 == pulses)
-        {
-            std::cout << "✅ Target position reached for motors 1 and 2." << std::endl;
-            break;
-        }
+    //     if (currentPosition1 == pulses && currentPosition2 == pulses)
+    //     {
+    //         std::cout << "✅ Target position reached for motors 1 and 2." << std::endl;
+    //         break;
+    //     }
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(100));
-    }
+    //     std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    // }
 
     return true;
 }
@@ -238,6 +240,30 @@ bool rotateTable(ModbusAZ &motor3, double angle_degrees, int speed_pulses, int o
         std::cerr << "Failed to rotate Motor 3." << std::endl;
         return false;
     }
+
+    // while (true)
+    // {
+    //     std::vector<int> positionVec3 = motor3.readPosition();
+    //     if (positionVec3.empty())
+    //     {
+    //         std::cerr << "❌ Failed to read position for motor(s) during movement." << std::endl;
+    //         return false;
+    //     }
+
+    //     int currentPosition3 = positionVec3[1];
+
+    //     std::cout << "pulses: " << pulses << std::endl;
+
+    //     std::cout << "Position motor 3: " << currentPosition3 << std::endl;
+
+    //     if (currentPosition3 == pulses)
+    //     {
+    //         std::cout << "✅ Target position reached for motors 3." << std::endl;
+    //         break;
+    //     }
+
+    //     std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    // }
 
     return true;
 }
@@ -406,6 +432,9 @@ double vision_x_cam = 0.0, vision_y_cam = 0.0, vision_z_cam = 0.0;
 double vision_x_base_r = 0.0, vision_y_base_r = 0.0, vision_z_base_r = 0.0;
 double vision_x_base_l = 0.0, vision_y_base_l = 0.0, vision_z_base_l = 0.0;
 
+double distance_1 = 0.0, rotate_1 = 0.0, linear_speed_1 = 0.0, angular_speed_1 = 0.0;
+double distance_2 = 0.0, rotate_2 = 0.0, linear_speed_2 = 0.0, angular_speed_2 = 0.0;
+
 // Function to receive vision coordinates from the ZMQ topic "P_camera"
 void visionReceiverCamera()
 {
@@ -469,6 +498,56 @@ void visionReceiverBaseL()
         sscanf(message.c_str(), "%lf %lf %lf", &vision_x_base_l, &vision_y_base_l, &vision_z_base_l);
 
         std::cout << "Received vision coordinates P_base_l: X=" << vision_x_base_l << " Y=" << vision_y_base_l << " Z=" << vision_z_base_l << std::endl;
+    }
+}
+
+// Function to receive moving table 1 command
+void MovingTableReceiver1()
+{
+    zmq::context_t context(1);
+    zmq::socket_t socket(context, ZMQ_REP);
+    // socket.connect("tcp://192.168.2.15:5555");
+    socket.bind("tcp://*:5556");
+    std::string topic = "P_moving_table_2";
+    // socket.setsockopt(ZMQ_SUBSCRIBE, topic.c_str(), topic.size());
+
+    while (true)
+    {
+        zmq::message_t zmq_message;
+        socket.recv(zmq_message, zmq::recv_flags::none);
+        std::string message(static_cast<char *>(zmq_message.data()) + topic.size(), zmq_message.size());
+
+        std::lock_guard<std::mutex> lock(coord_mutex);
+        sscanf(message.c_str(), "%lf %lf %lf %lf", &distance_1, &linear_speed_1, &rotate_1, &angular_speed_1);
+
+        std::cout << "P_moving_table_1: Distance=" << distance_1 << " speed=" << linear_speed_1 << " rotate=" << rotate_1 << " rotate speed=" << angular_speed_1 << std::endl;
+
+        socket.send(zmq_message, zmq::send_flags::none);
+    }
+}
+
+// Function to receive moving table 2 command
+void MovingTableReceiver2()
+{
+    zmq::context_t context(1);
+    zmq::socket_t socket(context, ZMQ_REP);
+    // socket.connect("tcp://192.168.2.15:5555");
+    socket.bind("tcp://*:5555");
+    std::string topic = "P_moving_table_2";
+    // socket.setsockopt(ZMQ_SUBSCRIBE, topic.c_str(), topic.size());
+
+    while (true)
+    {
+        zmq::message_t zmq_message;
+        socket.recv(zmq_message, zmq::recv_flags::none);
+        std::string message(static_cast<char *>(zmq_message.data()) + topic.size(), zmq_message.size());
+
+        std::lock_guard<std::mutex> lock(coord_mutex);
+        sscanf(message.c_str(), "%lf %lf %lf %lf", &distance_2, &linear_speed_2, &rotate_2, &angular_speed_2);
+
+        std::cout << "P_moving_table_2: Distance=" << distance_2 << " speed=" << linear_speed_2 << " rotate=" << rotate_2 << " rotate speed=" << angular_speed_2 << std::endl;
+
+        socket.send(zmq_message, zmq::send_flags::none);
     }
 }
 
@@ -641,6 +720,77 @@ void move_robot(KinovaManager &robot, desired_pose pose, std::mutex &robot_mutex
     }
 }
 
+// void move_robot_cart(KinovaManager &robot, const std::vector<double> &desired_pose,
+//                      double speed_linear, double speed_angular, std::mutex &robot_mutex)
+// {
+//     try
+//     {
+//         std::lock_guard<std::mutex> lock(robot_mutex); // Lock the mutex to ensure thread safety
+
+//         // Initialize robot connection if not already connected
+//         if (!robot.is_connected())
+//         {
+//             robot.setupConnection(); // Initialize connection
+//             if (!robot.is_connected())
+//             { // Check again after setup
+//                 throw std::runtime_error("Failed to initialize the robot.");
+//             }
+//             std::cout << "Robot initialized successfully.\n";
+//         }
+
+//         // Move robot to the desired Cartesian pose
+//         robot.go_to_cart(speed_linear, speed_angular, desired_pose);
+
+//         std::cout << "Robot moved to pose: X=" << desired_pose[0] << ", Y=" << desired_pose[1]
+//                   << ", Z=" << desired_pose[2] << ", Θx=" << desired_pose[3]
+//                   << ", Θy=" << desired_pose[4] << ", Θz=" << desired_pose[5] << std::endl;
+
+//         std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+//     }
+//     catch (const std::runtime_error &e)
+//     {
+//         std::cerr << "Error: " << e.what() << std::endl;
+//     }
+// }
+
+void move_robot_cart(KinovaManager &robot, const std::vector<double> &desired_pose,
+                     double speed_linear, double speed_angular, std::mutex &robot_mutex)
+{
+    try
+    {
+        std::lock_guard<std::mutex> lock(robot_mutex); // Lock mutex for thread safety
+
+        std::cout << "move_robot_cart called with Pose: X=" << desired_pose[0]
+                  << ", Y=" << desired_pose[1] << ", Z=" << desired_pose[2]
+                  << ", Θx=" << desired_pose[3] << ", Θy=" << desired_pose[4]
+                  << ", Θz=" << desired_pose[5] << std::endl;
+
+        if (!robot.is_connected())
+        {
+            std::cerr << "Error: Robot is not connected. Attempting to reconnect..." << std::endl;
+            robot.setupConnection();
+            if (!robot.is_connected())
+            {
+                throw std::runtime_error("Failed to initialize the robot.");
+            }
+            std::cout << "Robot reconnected successfully.\n";
+        }
+
+        int status = robot.go_to_cart(speed_linear, speed_angular, desired_pose);
+        if (status != 0)
+        {
+            throw std::runtime_error("go_to_cart() failed to execute.");
+        }
+
+        std::cout << "Robot moved successfully.\n";
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    }
+    catch (const std::runtime_error &e)
+    {
+        std::cerr << "Error in move_robot_cart: " << e.what() << std::endl;
+    }
+}
+
 // Gripper control function using KinovaManager::gripper
 void control_gripper(KinovaManager &robot, float position, int64_t time)
 {
@@ -672,8 +822,277 @@ void executeSequence(const std::vector<std::function<void()>> &tasks)
     }
 }
 
+// int main()
+// {
+//     ////////////////////////////////////// START Moving tables Initialization ////////////////////////////////////////////
+//     // Mobile Moving Table Initialization
+
+//     // First Moving Table Initialization
+//     CommPC commport1("/dev/ttyUSB0", 115200);
+//     ModbusAZ motor1(&commport1, 1), motor2(&commport1, 2), motor3(&commport1, 3);
+
+//     if (!OMconfigureMotor(motor1, "Motor 1") || !OMconfigureMotor(motor2, "Motor 2") || !OMconfigureMotor(motor3, "Motor 3"))
+//         return 0;
+
+//     // Second Moving Table Initialization
+//     CommPC commport2("/dev/ttyUSB1", 115200); // Assuming the second table uses a different port
+//     ModbusAZ motor4(&commport2, 1), motor5(&commport2, 2), motor6(&commport2, 3);
+
+//     if (!OMconfigureMotor(motor4, "Motor 4") || !OMconfigureMotor(motor5, "Motor 5") || !OMconfigureMotor(motor6, "Motor 6"))
+//         return 0;
+
+//     ////////////////////////////////////// END Moving tables Initialization ////////////////////////////////////////////
+//     //////////////////////////////////////// START Kinova Initialization ////////////////////////////////////////////
+//     // Kinova Robot Initialization
+//     desired_pose_id = desired_pose::HOME;
+
+//     // // Initialize robot managers
+//     // KinovaManager kinova_1(IP_ADDRESS_1, 10000);
+//     // KinovaManager kinova_2(IP_ADDRESS_2, 10000);
+//     // KinovaManager kinova_3(IP_ADDRESS_3, 10000);
+//     // KinovaManager kinova_4(IP_ADDRESS_4, 10000);
+
+//     //////////////////////////////////////// END Kinova Initialization ////////////////////////////////////////////
+
+//     std::mutex kinova_mutex_1, kinova_mutex_2, kinova_mutex_3, kinova_mutex_4;
+
+//     // // Move the first table to the home position (0 mm distance, 0 degrees)
+//     // std::thread table_thread_1([&]()
+//     //                            { goToTable(motor1, motor2, 0.0, 5000, motor3, 0.0, 2000, 1); });
+
+//     // std::thread kinova_thread_1([&]()
+//     //                             { move_robot(kinova_1, PACKAGING, kinova_mutex_1); });
+//     // std::thread kinova_thread_2([&]()
+//     //                             { move_robot(kinova_2, PACKAGING, kinova_mutex_2); });
+
+//     // // Optionally wait for the thread to finish execution
+//     // table_thread_1.join();
+//     // kinova_thread_1.join();
+//     // kinova_thread_2.join();
+
+//     // /////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//     // // Move the first table to the next position (500 mm distance, 0 degrees)
+//     // std::thread table_thread_2([&]()
+//     //                            { goToTable(motor1, motor2, 500.0, 5000, motor3, 0.0, 2000, 1); });
+
+//     // std::thread kinova_thread_3([&]()
+//     //                             { move_robot(kinova_1, HOME, kinova_mutex_1); });
+//     // std::thread kinova_thread_4([&]()
+//     //                             { move_robot(kinova_2, HOME, kinova_mutex_2); });
+
+//     // // Optionally wait for the thread to finish execution
+//     // table_thread_2.join();
+//     // kinova_thread_3.join();
+//     // kinova_thread_4.join();
+
+//     // // Define movement sequences
+//     // std::vector<std::vector<std::function<void()>>> sequences = {
+//     //     {[&]()
+//     //      { control_gripper(kinova_1, 0.01, 10); },
+//     //      [&]()
+//     //      { control_gripper(kinova_2, 0.01, 10); },
+//     //      [&]()
+//     //      { goToTable(motor1, motor2, 0.0, 5000, motor3, 0.0, 2000, 1); },
+//     //      [&]()
+//     //      { move_robot(kinova_1, PACKAGING, kinova_mutex_1); },
+//     //      [&]()
+//     //      { move_robot(kinova_2, PACKAGING, kinova_mutex_2); }},
+//     //     {[&]()
+//     //      { goToTable(motor1, motor2, 500.0, 5000, motor3, 0.0, 2000, 1); },
+//     //      [&]()
+//     //      { move_robot(kinova_1, HOME, kinova_mutex_1); },
+//     //      [&]()
+//     //      { move_robot(kinova_2, HOME, kinova_mutex_2); }}};
+
+//     std::vector<double> P_PACKAGING = {-0.067, 0.3, 0.071, 180.0, -40.0, 90.0};
+//     std::vector<double> P_HOME = {0.439, 0.4, 0.45, 90.0, -0.719, 150.0};
+
+//     std::vector<double> P1_BLANKET1 = {-0.22, -0.30, 0.86, -44.0, 14.0, 150.0};
+//     std::vector<double> P2_BLANKET1 = {-0.26, 0.29, 0.87, -144.0, 164.0, 15.0};
+
+//     std::vector<double> P1_BLANKET2 = {-0.22, -0.30, 0.60, -44.0, 14.0, 150.0};
+//     std::vector<double> P2_BLANKET2 = {-0.26, 0.29, 0.60, -144.0, 164.0, 15.0};
+
+//     std::vector<double> P1_BLANKET3 = {-0.22, -0.20, 0.60, -44.0, 14.0, 150.0};
+//     std::vector<double> P2_BLANKET3 = {-0.26, 0.20, 0.60, -144.0, 164.0, 15.0};
+
+//     std::vector<double> P3_BLANKET1 = {-0.22, -0.30, 0.86, -44.0, 14.0, 150.0};
+//     std::vector<double> P4_BLANKET1 = {-0.26, 0.29, 0.87, -144.0, 164.0, 15.0};
+
+//     std::vector<double> P3_BLANKET2 = {-0.29, -0.40, 0.75, -80.0, 2.3, 150.0};
+//     std::vector<double> P4_BLANKET2 = {-0.17, 0.40, 0.72, -122.0, 167.0, 18.0};
+
+//     std::vector<double> P1_BLANKET4 = {-0.22, -0.30, 0.60, -44.0, 14.0, 150.0};
+//     std::vector<double> P2_BLANKET4 = {-0.26, 0.30, 0.60, -144.0, 164.0, 15.0};
+
+//     std::vector<double> P1_BLANKET5 = {-0.22, -0.25, 0.60, -44.0, 14.0, 150.0};
+//     std::vector<double> P2_BLANKET5 = {-0.26, 0.25, 0.60, -144.0, 164.0, 15.0};
+
+//     std::vector<double> P3_BLANKET3 = {-0.40, -0.30, 0.67, -80.0, 2.3, 150.0};
+//     std::vector<double> P4_BLANKET3 = {-0.10, 0.35, 0.67, -122.0, 167.0, 18.0};
+
+//     double speed_linear = 0.2;   // Linear speed in m/s
+//     double speed_angular = 10.0; // Angular speed in deg/s
+
+//     // Define movement sequences
+//     std::vector<std::vector<std::function<void()>>> sequences = {
+//         ///////////////////////////////////////////////////////
+
+//         // {[&]()
+//         //  { control_gripper(kinova_1, 0.01, 10); },
+//         //  [&]()
+//         //  { control_gripper(kinova_2, 0.01, 10); },
+//         //  [&]()
+//         //  { control_gripper(kinova_3, 0.01, 10); },
+//         //  [&]()
+//         //  { control_gripper(kinova_4, 0.01, 10); }},
+
+//         // {[&]()
+//         //  { move_robot(kinova_1, PACKAGING_2, kinova_mutex_1); }},
+
+//         // {[&]()
+//         //  { move_robot(kinova_2, PACKAGING_2, kinova_mutex_2); }},
+
+//         {[&]()
+//          { goToTable(motor1, motor2, 800.0, 8000, motor3, 0.0, 2000, 1); }},
+
+//         // {[&]()
+//         //  { move_robot(kinova_3, PACKAGING_2, kinova_mutex_3); }},
+
+//         // {[&]()
+//         //  { move_robot(kinova_4, PACKAGING_2, kinova_mutex_4); }},
+
+//         {[&]()
+//          { goToTable(motor4, motor5, 800.0, 8000, motor6, 0.0, 2000, 1); }},
+
+//         ///////////////////////////////////////////////////////
+
+//         // {[&]()
+//         //  { move_robot(kinova_1, MOVING, kinova_mutex_1); },
+//         //  [&]()
+//         //  { move_robot(kinova_2, MOVING, kinova_mutex_2); }},
+
+//         // {[&]()
+//         //  { move_robot(kinova_3, MOVING, kinova_mutex_3); },
+//         //  [&]()
+//         //  { move_robot(kinova_4, MOVING, kinova_mutex_4); }},
+
+//         // {[&]()
+//         //  { goToTable(motor1, motor2, 1150.0, 7000, motor3, 0.0, 2000, 1); },
+//         //  [&]()
+//         //  { goToTable(motor4, motor5, 1150.0, 7000, motor6, 0.0, 2000, 1); }},
+
+//         // {[&]()
+//         //  { move_robot(kinova_1, HOME, kinova_mutex_1); },
+//         //  [&]()
+//         //  { move_robot(kinova_2, HOME, kinova_mutex_2); }},
+
+//         // {[&]()
+//         //  { move_robot_cart(kinova_1, P1_BLANKET1, 0.5, speed_angular, kinova_mutex_1); },
+//         //  [&]()
+//         //  { move_robot_cart(kinova_2, P2_BLANKET1, 0.2, speed_angular, kinova_mutex_2); }},
+
+//         // {[&]()
+//         //  { control_gripper(kinova_1, 0.9, 10); },
+//         //  [&]()
+//         //  { control_gripper(kinova_2, 0.9, 10); }},
+
+//         // {[&]()
+//         //  { move_robot_cart(kinova_1, P1_BLANKET2, 0.2, speed_angular, kinova_mutex_1); },
+//         //  [&]()
+//         //  { move_robot_cart(kinova_2, P2_BLANKET2, 0.2, speed_angular, kinova_mutex_2); }},
+
+//         // {[&]()
+//         //  { move_robot_cart(kinova_1, P1_BLANKET3, 0.2, speed_angular, kinova_mutex_1); },
+//         //  [&]()
+//         //  { move_robot_cart(kinova_2, P2_BLANKET3, 0.2, speed_angular, kinova_mutex_2); }},
+
+//         // {[&]()
+//         //  { goToTable(motor1, motor2, 1150.0, 7000, motor3, -180.0, 2000, 1); }},
+
+//         // {[&]()
+//         //  { move_robot(kinova_3, MOVING, kinova_mutex_3); },
+//         //  [&]()
+//         //  { move_robot(kinova_4, MOVING, kinova_mutex_4); }},
+
+//         // {[&]()
+//         //  { goToTable(motor4, motor5, 1150.0, 7000, motor6, 0.0, 2000, 1); }},
+
+//         // {[&]()
+//         //  { move_robot(kinova_3, HOME, kinova_mutex_3); },
+//         //  [&]()
+//         //  { move_robot(kinova_4, HOME, kinova_mutex_4); }},
+
+//         // {[&]()
+//         //  { move_robot_cart(kinova_3, P3_BLANKET1, 0.2, speed_angular, kinova_mutex_3); },
+//         //  [&]()
+//         //  { move_robot_cart(kinova_4, P4_BLANKET1, 0.2, speed_angular, kinova_mutex_4); }},
+
+//         // {[&]()
+//         //  { move_robot_cart(kinova_3, P3_BLANKET2, 0.2, speed_angular, kinova_mutex_3); },
+//         //  [&]()
+//         //  { move_robot_cart(kinova_4, P4_BLANKET2, 0.2, speed_angular, kinova_mutex_4); }},
+
+//         // {[&]()
+//         //  { move_robot_cart(kinova_1, P1_BLANKET4, 0.2, speed_angular, kinova_mutex_1); },
+//         //  [&]()
+//         //  { move_robot_cart(kinova_2, P2_BLANKET4, 0.2, speed_angular, kinova_mutex_2); }},
+
+//         // {[&]()
+//         //  { control_gripper(kinova_3, 0.9, 10); },
+//         //  [&]()
+//         //  { control_gripper(kinova_4, 0.9, 10); }},
+
+//         // {[&]()
+//         //  { control_gripper(kinova_1, 0.1, 10); },
+//         //  [&]()
+//         //  { control_gripper(kinova_2, 0.1, 10); }},
+
+//         // {[&]()
+//         //  { move_robot_cart(kinova_1, P1_BLANKET5, 0.2, speed_angular, kinova_mutex_1); },
+//         //  [&]()
+//         //  { move_robot_cart(kinova_2, P2_BLANKET5, 0.2, speed_angular, kinova_mutex_2); }},
+
+//         // {[&]()
+//         //  { move_robot(kinova_1, PACKAGING_2, kinova_mutex_1); }},
+
+//         // {[&]()
+//         //  { move_robot(kinova_2, PACKAGING_2, kinova_mutex_2); }},
+
+//         // {[&]()
+//         //  { goToTable(motor4, motor5, 1150.0, 7000, motor6, 90.0, 2000, 1); }},
+
+//         // {[&]()
+//         //  { move_robot_cart(kinova_3, P3_BLANKET3, 0.2, speed_angular, kinova_mutex_3); },
+//         //  [&]()
+//         //  { move_robot_cart(kinova_4, P4_BLANKET3, 0.2, speed_angular, kinova_mutex_4); }},
+
+//         // {[&]()
+//         //  { control_gripper(kinova_3, 0.1, 10); },
+//         //  [&]()
+//         //  { control_gripper(kinova_4, 0.1, 10); }},
+
+//         // {[&]()
+//         //  { goToTable(motor1, motor2, 0.0, 7000, motor3, -180.0, 2000, 1); }},
+
+//     };
+
+//     // Execute each sequence step by step
+//     for (const auto &sequence : sequences)
+//     {
+//         executeSequence(sequence);
+//     }
+
+//     return 0;
+// }
+
 int main()
 {
+
+    std::thread moving_table_receiver_thread_1(MovingTableReceiver1);
+    std::thread moving_table_receiver_thread_2(MovingTableReceiver2);
+
     ////////////////////////////////////// START Moving tables Initialization ////////////////////////////////////////////
     // Mobile Moving Table Initialization
 
@@ -684,317 +1103,64 @@ int main()
     if (!OMconfigureMotor(motor1, "Motor 1") || !OMconfigureMotor(motor2, "Motor 2") || !OMconfigureMotor(motor3, "Motor 3"))
         return 0;
 
+    // Second Moving Table Initialization
+    CommPC commport2("/dev/ttyUSB1", 115200); // Assuming the second table uses a different port
+    ModbusAZ motor4(&commport2, 1), motor5(&commport2, 2), motor6(&commport2, 3);
+
+    if (!OMconfigureMotor(motor4, "Motor 4") || !OMconfigureMotor(motor5, "Motor 5") || !OMconfigureMotor(motor6, "Motor 6"))
+        return 0;
+
     ////////////////////////////////////// END Moving tables Initialization ////////////////////////////////////////////
-    //////////////////////////////////////// START Kinova Initialization ////////////////////////////////////////////
-    // Kinova Robot Initialization
-    desired_pose_id = desired_pose::HOME;
 
-    // Initialize robot managers
-    KinovaManager kinova_1(IP_ADDRESS_1, 10000);
-    KinovaManager kinova_2(IP_ADDRESS_2, 10000);
-    // KinovaManager robot_3(IP_ADDRESS_3, 10000);
-    // KinovaManager robot_4(IP_ADDRESS_4, 10000);
+    // zmq::context_t context(1);
+    // zmq::socket_t socket(context, ZMQ_SUB);
+    // socket.connect("tcp://192.168.0.10:5555");
 
-    //////////////////////////////////////// END Kinova Initialization ////////////////////////////////////////////
+    // std::string topic_1 = "P_moving_table_1";
+    // socket.setsockopt(ZMQ_SUBSCRIBE, topic_1.c_str(), topic_1.size());
 
-    std::mutex kinova_mutex_1, kinova_mutex_2, kinova_mutex_3, kinova_mutex_4;
+    // std::string topic_1 = "P_moving_table_1";
+    // socket.setsockopt(ZMQ_SUBSCRIBE, topic_1.c_str(), topic_1.size());
 
-    // // Move the first table to the home position (0 mm distance, 0 degrees)
-    // std::thread table_thread_1([&]()
-    //                            { goToTable(motor1, motor2, 0.0, 5000, motor3, 0.0, 2000, 1); });
+    // double distance_1 = 0.0, speed_1 = 0.0;
 
-    // std::thread kinova_thread_1([&]()
-    //                             { move_robot(kinova_1, PACKAGING, kinova_mutex_1); });
-    // std::thread kinova_thread_2([&]()
-    //                             { move_robot(kinova_2, PACKAGING, kinova_mutex_2); });
-
-    // // Optionally wait for the thread to finish execution
-    // table_thread_1.join();
-    // kinova_thread_1.join();
-    // kinova_thread_2.join();
-
-    // /////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    // // Move the first table to the next position (500 mm distance, 0 degrees)
-    // std::thread table_thread_2([&]()
-    //                            { goToTable(motor1, motor2, 500.0, 5000, motor3, 0.0, 2000, 1); });
-
-    // std::thread kinova_thread_3([&]()
-    //                             { move_robot(kinova_1, HOME, kinova_mutex_1); });
-    // std::thread kinova_thread_4([&]()
-    //                             { move_robot(kinova_2, HOME, kinova_mutex_2); });
-
-    // // Optionally wait for the thread to finish execution
-    // table_thread_2.join();
-    // kinova_thread_3.join();
-    // kinova_thread_4.join();
-
-    // // Define movement sequences
-    // std::vector<std::vector<std::function<void()>>> sequences = {
-    //     {[&]()
-    //      { control_gripper(kinova_1, 0.01, 10); },
-    //      [&]()
-    //      { control_gripper(kinova_2, 0.01, 10); },
-    //      [&]()
-    //      { goToTable(motor1, motor2, 0.0, 5000, motor3, 0.0, 2000, 1); },
-    //      [&]()
-    //      { move_robot(kinova_1, PACKAGING, kinova_mutex_1); },
-    //      [&]()
-    //      { move_robot(kinova_2, PACKAGING, kinova_mutex_2); }},
-    //     {[&]()
-    //      { goToTable(motor1, motor2, 500.0, 5000, motor3, 0.0, 2000, 1); },
-    //      [&]()
-    //      { move_robot(kinova_1, HOME, kinova_mutex_1); },
-    //      [&]()
-    //      { move_robot(kinova_2, HOME, kinova_mutex_2); }}};
-
-    // Define movement sequences
-    std::vector<std::vector<std::function<void()>>> sequences = {
-        {[&]()
-         { control_gripper(kinova_1, 0.01, 10); },
-         [&]()
-         { control_gripper(kinova_2, 0.01, 10); }},
-
-        {[&]()
-         { goToTable(motor1, motor2, 0.0, 5000, motor3, 0.0, 2000, 1); },
-         [&]()
-         { move_robot(kinova_1, PACKAGING, kinova_mutex_1); },
-         [&]()
-         { move_robot(kinova_2, PACKAGING, kinova_mutex_2); }},
-
-        // {[&]()
-        //  { goToTable(motor1, motor2, 500.0, 5000, motor3, 0.0, 2000, 1); },
-        //  [&]()
-        //  { move_robot(kinova_1, HOME, kinova_mutex_1); },
-        //  [&]()
-        //  { move_robot(kinova_2, HOME, kinova_mutex_2); }},
-
-        // {[&]()
-        //  { goToTable(motor1, motor2, 500.0, 5000, motor3, 20.0, 2000, 1); },
-        //  [&]()
-        //  { control_gripper(kinova_1, 0.9, 10); },
-        //  [&]()
-        //  { control_gripper(kinova_2, 0.9, 10); }},
-
-    };
-
-    // Execute each sequence step by step
-    for (const auto &sequence : sequences)
-    {
-        executeSequence(sequence);
-    }
-
-    // std::this_thread::sleep_for(std::chrono::milliseconds(10000));
-
-    // goToTable(motor1, motor2, 0.0, 4000, motor3, 0.0, 2000, 1);
-
-    // goToTable(motor1, motor2, 1000.0, 4000, motor3, 0.0, 2000, 1);
-    // std::this_thread::sleep_for(std::chrono::milliseconds(10000));
-
-    // goToTable(motor1, motor2, 0.0, 4000, motor3, 0.0, 2000, 1);
-    // std::this_thread::sleep_for(std::chrono::milliseconds(5000));
-
-    // if (!rotateTable(motor3, 45.0, 2000, 1))
+    // while (true)
     // {
-    //     std::cerr << "Failed to rotate the table." << std::endl;
-    //     return 0;
+    //     zmq::message_t zmq_message;
+    //     socket.recv(zmq_message, zmq::recv_flags::none);
+    //     std::string message(static_cast<char *>(zmq_message.data()) + topic.size(), zmq_message.size());
+
+    //     std::lock_guard<std::mutex> lock(coord_mutex);
+    //     sscanf(message.c_str(), "%lf %lf", &distance_1, &speed_1, &vision_z_base_l);
+
+    //     std::cout << "P_moving_table_1: Distance" << distance_1 << " speed=" << speed_1 << std::endl;
     // }
 
-    // // Second Moving Table Initialization
-    // CommPC commport2("/dev/ttyUSB1", 115200); // Assuming the second table uses a different port
-    // ModbusAZ motor4(&commport2, 4), motor5(&commport2, 5), motor6(&commport2, 6);
+    while (true)
+    {
+        // Wait for a vision update before moving the robot
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
-    // if (!OMconfigureMotor(motor4, "Motor 4") || !OMconfigureMotor(motor5, "Motor 5") || !OMconfigureMotor(motor6, "Motor 6"))
-    //     return 0;
+        {
+            std::lock_guard<std::mutex> lock(coord_mutex);
+            std::cout << "P_moving_table_1: Distance=" << distance_1 << " speed=" << linear_speed_1 << " rotate=" << rotate_1 << " rotate speed=" << angular_speed_1 << std::endl;
+            std::cout << "P_moving_table_2: Distance=" << distance_2 << " speed=" << linear_speed_2 << " rotate=" << rotate_2 << " rotate speed=" << angular_speed_2 << std::endl;
 
-    // // Move the second table to the home position (0 mm distance, 0 degrees)
-    // goToTable(motor4, motor5, motor6, 0.0, 0.0, 2000, 1);
+            goToTable(motor1, motor2, distance_1, linear_speed_1, motor3, rotate_1, angular_speed_1, 1);
+            goToTable(motor4, motor5, distance_2, linear_speed_2, motor6, rotate_2, angular_speed_2, 1);
 
-    // std::this_thread::sleep_for(std::chrono::milliseconds(2000));
+            // std::thread moving_table_thread_1([&]()
+            //                                   { goToTable(motor1, motor2, distance_1, linear_speed_1, motor3, rotate_1, angular_speed_1, 1); });
+            // std::thread moving_table_thread_2([&]()
+            //                                   { goToTable(motor4, motor5, distance_2, linear_speed_2, motor6, rotate_2, angular_speed_2, 1); });
+        }
 
-    ////////////////////////////////////// END Moving tables Initialization ////////////////////////////////////////////
+        // moving_table_thread_1.join();
+        // moving_table_thread_2.join();
+    }
 
-    // // Initialize robot managers for 4 robots
-    // KinovaManager robot_1(IP_ADDRESS_1, 10000);
-    // KinovaManager robot_2(IP_ADDRESS_2, 10000);
-    // // KinovaManager robot_3(IP_ADDRESS_3, 10000);
-    // // KinovaManager robot_4(IP_ADDRESS_4, 10000);
-
-    // // Create threads to move tables simultaneously
-    // std::thread table_thread_1(goToTable, std::ref(motor1), std::ref(motor2), std::ref(motor3),
-    //                            0.0, 0.0, 2000, 1);
-
-    // // Wait for moving table threads to finish
-    // table_thread_1.join();
-
-    // // Mutexes for thread safety
-    // std::mutex robot_mutex_1, robot_mutex_2, robot_mutex_3, robot_mutex_4;
-
-    // // Create threads for opening the grippers first
-    // std::thread gripper_thread_1([&]()
-    //                              { control_gripper(robot_1, 0.01, 10); }); // Open gripper for robot_1
-    // std::thread gripper_thread_2([&]()
-    //                              { control_gripper(robot_2, 0.01, 10); }); // Open gripper for robot_2
-    // // std::thread gripper_thread_3([&]() { control_gripper(robot_3, 0.01, 10); }); // Open gripper for robot_3
-    // // std::thread gripper_thread_4([&]() { control_gripper(robot_4, 0.01, 10); }); // Open gripper for robot_4
-
-    // // Wait for gripper threads to finish opening the grippers
-    // gripper_thread_1.join();
-    // gripper_thread_2.join();
-    // // gripper_thread_3.join();
-    // // gripper_thread_4.join();
-
-    // // Create threads for moving robots to CANDLE pose after opening grippers
-    // std::thread robot_thread_1([&]()
-    //                            { move_robot(robot_1, HOME, robot_mutex_1); });
-    // std::thread robot_thread_2([&]()
-    //                            { move_robot(robot_2, CANDLE, robot_mutex_2); });
-    // // std::thread robot_thread_3([&]() { move_robot(robot_3, CANDLE, robot_mutex_3); });
-    // // std::thread robot_thread_4([&]() { move_robot(robot_4, CANDLE, robot_mutex_4); });
-
-    // // Wait for robots to finish moving to CANDLE pose
-    // robot_thread_1.join();
-    // robot_thread_2.join();
-    // // robot_thread_3.join();
-    // // robot_thread_4.join();
-
-    // // Create threads for closing the grippers after reaching CANDLE pose
-    // std::thread gripper_thread_5([&]()
-    //                              { control_gripper(robot_1, 0.9, 10); }); // Close gripper for robot_1
-    // std::thread gripper_thread_6([&]()
-    //                              { control_gripper(robot_2, 0.9, 10); }); // Close gripper for robot_2
-    // // std::thread gripper_thread_7([&]() { control_gripper(robot_3, 1.0, 10); }); // Close gripper for robot_3
-    // // std::thread gripper_thread_8([&]() { control_gripper(robot_4, 1.0, 10); }); // Close gripper for robot_4
-
-    // // Wait for gripper threads to finish closing the grippers
-    // gripper_thread_5.join();
-    // gripper_thread_6.join();
-    // // gripper_thread_7.join();
-    // // gripper_thread_8.join();
-
-    // std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-
-    // // Move all robots to HOME pose
-    // std::thread robot_thread_5([&]()
-    //                            { move_robot(robot_1, CANDLE, robot_mutex_1); });
-    // std::thread robot_thread_6([&]()
-    //                            { move_robot(robot_2, HOME, robot_mutex_2); });
-    // // std::thread robot_thread_7([&]() { move_robot(robot_3, HOME, robot_mutex_3); });
-    // // std::thread robot_thread_8([&]() { move_robot(robot_4, HOME, robot_mutex_4); });
-
-    // // Wait for all robots to finish moving to HOME pose
-    // robot_thread_5.join();
-    // robot_thread_6.join();
-    // // robot_thread_7.join();
-    // // robot_thread_8.join();
-
-    // // Stop the connection with all robots
-    // robot_1.stopConnection();
-    // robot_2.stopConnection();
-    // // robot_3.stopConnection();
-    // // robot_4.stopConnection();
+    moving_table_receiver_thread_1.join();
+    moving_table_receiver_thread_2.join();
 
     return 0;
 }
-
-// #include <iostream>
-// #include <thread>
-// #include "KinovaManager.hpp"
-
-// void move_robot(KinovaManager& robot, int pose) {
-//     robot.go_to(pose);  // Use go_to or go_to_cart as needed
-// }
-
-// int main() {
-//     // IP addresses of the robots
-//     std::string ip_address_1 = "192.168.1.1";
-//     std::string ip_address_2 = "192.168.1.2";
-//     std::string ip_address_3 = "192.168.1.3";
-//     std::string ip_address_4 = "192.168.1.4";
-
-//     // Initialize robot managers
-//     KinovaManager robot_1(ip_address_1, 10000);
-//     KinovaManager robot_2(ip_address_2, 10000);
-//     KinovaManager robot_3(ip_address_3, 10000);
-//     KinovaManager robot_4(ip_address_4, 10000);
-
-//     // Create threads to move robots simultaneously
-//     std::thread robot_thread_1(move_robot, std::ref(robot_1), 1);  // CANDLE pose
-//     std::thread robot_thread_2(move_robot, std::ref(robot_2), 2);  // APPROACH_TABLE pose
-//     std::thread robot_thread_3(move_robot, std::ref(robot_3), 3);  // HOME pose
-//     std::thread robot_thread_4(move_robot, std::ref(robot_4), 4);  // CANDLE pose
-
-//     // Wait for all robots to finish moving
-//     robot_thread_1.join();
-//     robot_thread_2.join();
-//     robot_thread_3.join();
-//     robot_thread_4.join();
-
-//     return 0;
-// }
-
-// int main(int argc, char **argv)
-// {
-//     RATE_HZ = 700; // Hz
-
-//     desired_pose_id = desired_pose::HOME;
-//     desired_control_mode = control_mode::POSITION;
-
-//     kinova_manager robot_driver_1;
-//     kinova_manager robot_driver_2;
-
-//     int return_flag = 0;
-
-//     // Extract robot model and if not simulation, establish connection with motor drivers
-//     if (!robot_driver_1.is_initialized())
-//         robot_driver_1.initialize(robot_id::KINOVA_GEN3_lITE_1, 1.0 / static_cast<double>(RATE_HZ));
-//     if (!robot_driver_1.is_initialized())
-//     {
-//         printf("Robot 1 is not initialized\n");
-//         return 0;
-//     }
-
-//     if (!robot_driver_2.is_initialized())
-//         robot_driver_2.initialize(robot_id::KINOVA_GEN3_lITE_2, 1.0 / static_cast<double>(RATE_HZ));
-//     if (!robot_driver_2.is_initialized())
-//     {
-//         printf("Robot 2 is not initialized\n");
-//         return 0;
-//     }
-
-//     // return_flag = go_to(robot_driver_1, robot_driver_2, desired_pose_id);
-//     // if (return_flag != 0)
-//     //     return 0;
-
-//     // return_flag = go_to_cart(robot_driver_1, 0.5, 10, robot_driver_2, 0.1, 10, desired_pose::BLANKET_1);
-//     // if (return_flag != 0)
-//     //     return 0;
-
-//     // return_flag = go_to(robot_driver_1, robot_driver_2, desired_pose_id);
-//     // if (return_flag != 0)
-//     //     return 0;
-
-//     // gripper_with_ekrror_handling(robot_driver_1, 0.01, robot_driver_2, 0.01, 1000); // open 1 2 gripper
-
-//     // go_to_with_error_handling(robot_driver_1, robot_driver_2, desired_pose::HOME); // go to Home
-
-//     // go_to_cart_with_error_handling(robot_driver_1, 0.5, 10, robot_driver_2, 0.1, 10, desired_pose::BLANKET_1);
-
-//     // gripper_with_error_handling(robot_driver_1, 0.01, robot_driver_2, 0.9, 10); // close 2 gripper
-
-//     // go_to_with_error_handling(robot_driver_1, robot_driver_2, desired_pose::HOME);
-
-//     go_to_cart_with_error_handling(robot_driver_1, 0.5, 10, robot_driver_2, 0.5, 10, desired_pose::BLANKET_2);
-
-//     // gripper_with_error_handling(robot_driver_1, 0.01, robot_driver_2, 0.9, 10); // close 2 gripper
-
-//     // go_to_cart_with_error_handling(robot_driver_1, 0.5, 10, robot_driver_2, 0.5, 10, desired_pose::BLANKET_1);
-
-//     // gripper_with_error_handling(robot_driver_1, 0.01, robot_driver_2, 0.01, 1000); // open 1 2 gripper
-
-//     robot_driver_1.deinitialize();
-//     robot_driver_2.deinitialize();
-
-//     std::cout << "Kinova Multi-Arm Project Finish!" << std::endl;
-//     return 0;
-// }

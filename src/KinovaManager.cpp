@@ -9,11 +9,13 @@ enum desired_pose
     CANDLE = 0,
     HOME = 1,
     RETRACT = 2,
-    PACKAGING = 3,
+    PACKAGING_1 = 31,
+    PACKAGING_2 = 32,
     HOME_FORWARD = 4,
     HOME_BACK = 5,
     APPROACH_TABLE = 6,
     TEST = 7,
+    MOVING = 8,
     BLANKET_1 = 10,
     BLANKET_2 = 11,
     BLANKET_3 = 12,
@@ -108,7 +110,7 @@ void KinovaManager::setupConnection()
     // control_config_->GetGravityVector();
 
     // std::cout << gravityVector << std::endl;
-    
+
     std::cout
         << "Kinova sessions created" << std::endl;
 
@@ -180,39 +182,87 @@ void KinovaManager::executePoseMovement(const std::vector<double> &configuration
 
 void KinovaManager::executeCartesianMovement(const std::vector<double> &desired_ee_pose, double &speed_linear, double &speed_angular)
 {
-    // Implement Cartesian movement execution logic here
-    // You can use the desired_ee_pose for Cartesian control
-    // Similar to joint angle control, but based on position/rotation instead
+    // // Implement Cartesian movement execution logic here
+    // // You can use the desired_ee_pose for Cartesian control
+    // // Similar to joint angle control, but based on position/rotation instead
 
-    std::cout << "Starting Cartesian action movement ..." << std::endl;
+    // std::cout << "Starting Cartesian action movement ..." << std::endl;
 
-    auto feedback_ = base_cyclic_->RefreshFeedback();
-    auto action_ = Kinova::Api::Base::Action();
-    action_.set_name("Kinova 1 Cartesian action movement");
-    action_.set_application_data("");
+    // auto feedback_ = base_cyclic_->RefreshFeedback();
+    // auto action_ = Kinova::Api::Base::Action();
+    // action_.set_name("Kinova Cartesian action movement");
+    // action_.set_application_data("");
 
-    auto constrained_pose_ = action_.mutable_reach_pose();
-    auto pose_ = constrained_pose_->mutable_target_pose();
+    // auto constrained_pose_ = action_.mutable_reach_pose();
+    // auto pose_ = constrained_pose_->mutable_target_pose();
 
-    pose_->set_x(desired_ee_pose[0]);       // x (meters)
-    pose_->set_y(desired_ee_pose[1]);       // y (meters)
-    pose_->set_z(desired_ee_pose[2]);       // z (meters)
-    pose_->set_theta_x(desired_ee_pose[3]); // theta x (degrees)
-    pose_->set_theta_y(desired_ee_pose[4]); // theta y (degrees)
-    pose_->set_theta_z(desired_ee_pose[5]); // theta z (degrees)
+    // pose_->set_x(desired_ee_pose[0]);       // x (meters)
+    // pose_->set_y(desired_ee_pose[1]);       // y (meters)
+    // pose_->set_z(desired_ee_pose[2]);       // z (meters)
+    // pose_->set_theta_x(desired_ee_pose[3]); // theta x (degrees)
+    // pose_->set_theta_y(desired_ee_pose[4]); // theta y (degrees)
+    // pose_->set_theta_z(desired_ee_pose[5]); // theta z (degrees)
 
-    Kinova::Api::Base::CartesianSpeed *cartesian_speed_ = constrained_pose_->mutable_constraint()->mutable_speed();
-    cartesian_speed_->set_translation(speed_linear);  // Linear speed in m/s
-    cartesian_speed_->set_orientation(speed_angular); // Angular speed in deg/s
+    // Kinova::Api::Base::CartesianSpeed *cartesian_speed_ = constrained_pose_->mutable_constraint()->mutable_speed();
+    // cartesian_speed_->set_translation(speed_linear);  // Linear speed in m/s
+    // cartesian_speed_->set_orientation(speed_angular); // Angular speed in deg/s
+
+    // auto finish_promise = std::promise<Kinova::Api::Base::ActionEvent>();
+    // auto finish_future = finish_promise.get_future();
+    // auto promise_notification_handle = base_->OnNotificationActionTopic(
+    //     create_event_listener_by_promise(finish_promise), Kinova::Api::Common::NotificationOptions());
+
+    // base_->ExecuteAction(action_);
+
+    // feedback_ = base_cyclic_->RefreshFeedback();
+    // std::cout << "Robot current status: " << feedback_.base().active_state() << std::endl;
+
+    // finish_future.wait_for(std::chrono::seconds(30)); // Adjust this duration as necessary
+
+    // base_->Unsubscribe(promise_notification_handle);
+
+    std::cout << "[executeCartesianMovement] Executing movement to: X=" << desired_ee_pose[0]
+              << ", Y=" << desired_ee_pose[1] << ", Z=" << desired_ee_pose[2]
+              << ", Θx=" << desired_ee_pose[3] << ", Θy=" << desired_ee_pose[4]
+              << ", Θz=" << desired_ee_pose[5] << std::endl;
+
+    auto feedback = base_cyclic_->RefreshFeedback();
+    auto action = Kinova::Api::Base::Action();
+    action.set_name("Kinova Cartesian action movement");
+
+    auto constrained_pose = action.mutable_reach_pose();
+    auto pose = constrained_pose->mutable_target_pose();
+
+    pose->set_x(desired_ee_pose[0]);
+    pose->set_y(desired_ee_pose[1]);
+    pose->set_z(desired_ee_pose[2]);
+    pose->set_theta_x(desired_ee_pose[3]);
+    pose->set_theta_y(desired_ee_pose[4]);
+    pose->set_theta_z(desired_ee_pose[5]);
+
+    Kinova::Api::Base::CartesianSpeed *cartesian_speed = constrained_pose->mutable_constraint()->mutable_speed();
+    cartesian_speed->set_translation(speed_linear);
+    cartesian_speed->set_orientation(speed_angular);
+
+    std::cout << "[executeCartesianMovement] Sending movement command..." << std::endl;
 
     auto finish_promise = std::promise<Kinova::Api::Base::ActionEvent>();
     auto finish_future = finish_promise.get_future();
     auto promise_notification_handle = base_->OnNotificationActionTopic(
         create_event_listener_by_promise(finish_promise), Kinova::Api::Common::NotificationOptions());
 
-    base_->ExecuteAction(action_);
+    base_->ExecuteAction(action);
+    std::cout << "[executeCartesianMovement] Action sent, waiting for completion..." << std::endl;
 
-    finish_future.wait_for(std::chrono::seconds(30)); // Adjust this duration as necessary
+    // Wait until the action completes or times out
+    if (finish_future.wait_for(std::chrono::seconds(10)) == std::future_status::timeout)
+    {
+        std::cerr << "[executeCartesianMovement] Warning: Motion command timeout!" << std::endl;
+    }
+    else
+    {
+        std::cout << "[executeCartesianMovement] Movement complete!" << std::endl;
+    }
 
     base_->Unsubscribe(promise_notification_handle);
 }
@@ -231,14 +281,20 @@ int KinovaManager::go_to(const int desired_pose)
     case desired_pose::HOME_BACK: // HOME_BACK
         configuration_array = {356.129, 304.126, 181.482, 250.087, 2.852, 328.367};
         break;
-    case desired_pose::PACKAGING: // PACKAGING
-        configuration_array = {270.0, 148.0, 148.0, 270.0, 140.0, 0.0};
+    case desired_pose::PACKAGING_1: // PACKAGING_1
+        configuration_array = {0.0, 148.0, 148.0, 270.0, 140.0, 0.0};
+        break;
+    case desired_pose::PACKAGING_2: // PACKAGING_2
+        configuration_array = {0.0, 148.0, 148.0, 270.0, 140.0, 0.0};
         break;
     case desired_pose::RETRACT: // RETRACT
         configuration_array = {0.0, 340.0, 180.0, 214.0, 0.0, 310.0};
         break;
     case desired_pose::HOME: // HOME
         configuration_array = {0.0, 344.0, 75.0, 0.0, 300.0, 0.0};
+        break;
+    case desired_pose::MOVING: // MOVING
+        configuration_array = {0.0, 344.0, 75.0, 0.0, 0.0, 0.0};
         break;
     default:
         return -1;
@@ -248,23 +304,66 @@ int KinovaManager::go_to(const int desired_pose)
     return 0;
 }
 
-int KinovaManager::go_to_cart(double speed_linear, double speed_angular, const int desired_pose)
-{
-    std::vector<double> desired_ee_pose(6, 0.0);
+// int KinovaManager::go_to_cart(double speed_linear, double speed_angular, const int desired_pose)
+// {
+//     std::vector<double> desired_ee_pose(6, 0.0);
 
-    switch (desired_pose)
+//     switch (desired_pose)
+//     {
+//     case desired_pose::CANDLE: // CANDLE
+//         desired_ee_pose = {0.057, -0.01, 1.0003, 0.0, 0.0, 90.0};
+//         break;
+//     case desired_pose::HOME: // HOME
+//         desired_ee_pose = {0.438, -0.195, 0.449, 90.0, 0.0, 30.0};
+//         break;
+//     default:
+//         return -1;
+//     }
+
+//     executeCartesianMovement(desired_ee_pose, speed_linear, speed_angular);
+//     return 0;
+// }
+
+// int KinovaManager::go_to_cart(double speed_linear, double speed_angular, const std::vector<double> &desired_pose)
+// {
+//     if (desired_pose.size() != 6)
+//     {
+//         std::cerr << "Error: Desired pose must contain exactly 6 elements (X, Y, Z, Θx, Θy, Θz)." << std::endl;
+//         return -1;
+//     }
+
+//     executeCartesianMovement(desired_pose, speed_linear, speed_angular);
+//     return 0;
+// }
+
+// int KinovaManager::go_to_cart(double speed_linear, double speed_angular, const std::vector<double> &desired_pose)
+// {
+//     if (desired_pose.size() != 6)
+//     {
+//         std::cerr << "Error: Desired pose must contain exactly 6 elements (X, Y, Z, Θx, Θy, Θz)." << std::endl;
+//         return -1;
+//     }
+
+//     executeCartesianMovement(desired_pose, speed_linear, speed_angular);
+//     return 0;
+// }
+
+int KinovaManager::go_to_cart(double speed_linear, double speed_angular, const std::vector<double> &desired_pose)
+{
+    if (desired_pose.size() != 6)
     {
-    case desired_pose::CANDLE: // CANDLE
-        desired_ee_pose = {0.057, -0.01, 1.0003, 0.0, 0.0, 90.0};
-        break;
-    case desired_pose::HOME: // HOME
-        desired_ee_pose = {0.438, -0.195, 0.449, 90.0, 0.0, 30.0};
-        break;
-    default:
+        std::cerr << "Error: Desired pose must have 6 elements!" << std::endl;
         return -1;
     }
 
-    executeCartesianMovement(desired_ee_pose, speed_linear, speed_angular);
+    std::cout << "[go_to_cart] Moving to: X=" << desired_pose[0]
+              << ", Y=" << desired_pose[1] << ", Z=" << desired_pose[2]
+              << ", Θx=" << desired_pose[3] << ", Θy=" << desired_pose[4]
+              << ", Θz=" << desired_pose[5] << std::endl;
+
+    executeCartesianMovement(desired_pose, speed_linear, speed_angular);
+    std::cout << "[go_to_cart] executeCartesianMovement called!" << std::endl;
+
     return 0;
 }
 
@@ -343,21 +442,90 @@ int KinovaManager::stop_robot_motion()
     return 0;
 }
 
+// int KinovaManager::gripper(float target_position, int64_t time)
+// {
+//     // Initialize gripper command
+//     Kinova::Api::Base::GripperCommand gripper_command_;
+//     gripper_command_.set_mode(Kinova::Api::Base::GRIPPER_POSITION);
+
+//     // Set the initial position of the gripper to a known state (finger 1)
+//     auto finger_ = gripper_command_.mutable_gripper()->add_finger();
+//     finger_->set_finger_identifier(1);
+//     finger_->set_value(0); // Set initial position to 0 (open)
+
+//     // Send the initial gripper position
+//     base_->SendGripperCommand(gripper_command_);
+//     std::this_thread::sleep_for(std::chrono::milliseconds(time)); // Wait for initialization
+
+//     // Move the gripper to the target position
+//     gripper_command_.set_mode(Kinova::Api::Base::GRIPPER_POSITION);
+//     finger_->set_value(target_position);
+//     base_->SendGripperCommand(gripper_command_);
+//     std::cout << "⏳ Moving gripper to target position: " << target_position << std::endl;
+
+//     // Feedback loop to check gripper position
+//     Kinova::Api::Base::Gripper gripper_feedback;
+//     Kinova::Api::Base::GripperRequest gripper_request;
+//     bool is_motion_completed = false;
+
+//     // Set the request mode to position for feedback
+//     gripper_request.set_mode(Kinova::Api::Base::GRIPPER_POSITION);
+
+//     // Continue to check feedback until the gripper reaches the target position or time-out
+//     while (!is_motion_completed)
+//     {
+//         float position_ = 0.0f;
+
+//         // Get the feedback on gripper position
+//         gripper_feedback = base_->GetMeasuredGripperMovement(gripper_request);
+
+//         // Ensure the finger position is available in the feedback
+//         if (gripper_feedback.finger_size() > 0)
+//         {
+//             position_ = gripper_feedback.finger(0).value();
+//             std::cout << "Reported position: " << position_ << std::endl;
+//         }
+//         else
+//         {
+//             std::cerr << "❌ Gripper feedback not available!" << std::endl;
+//             return -1;
+//         }
+
+//         // Check if the gripper position is within tolerance of the target
+//         if (std::abs(position_ - target_position) <= 0.1) // Tolerance threshold of 0.05
+//         {
+//             is_motion_completed = true;
+//             std::cout << "✅ Gripper has reached the target position: " << target_position << std::endl;
+//         }
+//         else
+//         {
+//             std::cout << "🔄 Gripper is still moving. Current position: " << position_ << std::endl;
+//         }
+
+//         // Wait before re-checking
+//         std::this_thread::sleep_for(std::chrono::milliseconds(50));
+//     }
+
+//     return 0; // Success
+// }
 
 int KinovaManager::gripper(float target_position, int64_t time)
 {
+
+    int64_t timeout = 2000;
+
     // Initialize gripper command
     Kinova::Api::Base::GripperCommand gripper_command_;
     gripper_command_.set_mode(Kinova::Api::Base::GRIPPER_POSITION);
-    
+
     // Set the initial position of the gripper to a known state (finger 1)
     auto finger_ = gripper_command_.mutable_gripper()->add_finger();
     finger_->set_finger_identifier(1);
     finger_->set_value(0); // Set initial position to 0 (open)
-    
+
     // Send the initial gripper position
     base_->SendGripperCommand(gripper_command_);
-    std::this_thread::sleep_for(std::chrono::milliseconds(time));  // Wait for initialization
+    std::this_thread::sleep_for(std::chrono::milliseconds(time)); // Wait for initialization
 
     // Move the gripper to the target position
     gripper_command_.set_mode(Kinova::Api::Base::GRIPPER_POSITION);
@@ -372,6 +540,8 @@ int KinovaManager::gripper(float target_position, int64_t time)
 
     // Set the request mode to position for feedback
     gripper_request.set_mode(Kinova::Api::Base::GRIPPER_POSITION);
+
+    auto start_time = std::chrono::steady_clock::now();
 
     // Continue to check feedback until the gripper reaches the target position or time-out
     while (!is_motion_completed)
@@ -394,7 +564,7 @@ int KinovaManager::gripper(float target_position, int64_t time)
         }
 
         // Check if the gripper position is within tolerance of the target
-        if (std::abs(position_ - target_position) <= 0.05)  // Tolerance threshold of 0.05
+        if (std::abs(position_ - target_position) <= 0.1) // Tolerance threshold of 0.1
         {
             is_motion_completed = true;
             std::cout << "✅ Gripper has reached the target position: " << target_position << std::endl;
@@ -404,9 +574,18 @@ int KinovaManager::gripper(float target_position, int64_t time)
             std::cout << "🔄 Gripper is still moving. Current position: " << position_ << std::endl;
         }
 
+        // Check for timeout
+        auto elapsed_time = std::chrono::steady_clock::now() - start_time;
+        if (std::chrono::duration_cast<std::chrono::milliseconds>(elapsed_time).count() >= timeout)
+        {
+            std::cerr << "⏳ Timeout reached! Gripper did not reach target position." << std::endl;
+            return -1;
+        }
+
         // Wait before re-checking
         std::this_thread::sleep_for(std::chrono::milliseconds(50));
     }
 
-    return 0;  // Success
+    return 0; // Success
 }
+
