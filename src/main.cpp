@@ -1160,6 +1160,10 @@ int main()
             executeSequence(sequence);
         }
 
+        // goToTable(motor4, motor5, 1000.0, 5000.0, motor6, 0.0, 2000.0, 1); 
+
+        // goToTable(motor1, motor2, 1000.0, 5000.0, motor3, 0.0, 2000.0, 1); 
+
     }
 
     // Join threads after the loop finishes
