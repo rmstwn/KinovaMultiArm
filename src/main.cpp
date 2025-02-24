@@ -217,6 +217,22 @@ bool moveTable(ModbusAZ &motor1, ModbusAZ &motor2, double distance_mm, int speed
     //         std::cout << "✅ Target position reached for motors 1 and 2." << std::endl;
     //         break;
     //     }
+    //     else
+    //     {
+    //         // Move motor 1
+    //         if (motor1.startPosition(pulses, speed_pulses, operation_type).empty())
+    //         {
+    //             std::cerr << "Failed to move Motor 1." << std::endl;
+    //             return false;
+    //         }
+
+    //         // Move motor 2 in reverse direction (assuming differential drive)
+    //         if (motor2.startPosition(pulses, speed_pulses, operation_type).empty())
+    //         {
+    //             std::cerr << "Failed to move Motor 2." << std::endl;
+    //             return false;
+    //         }
+    //     }
 
     //     std::this_thread::sleep_for(std::chrono::milliseconds(100));
     // }
@@ -260,6 +276,15 @@ bool rotateTable(ModbusAZ &motor3, double angle_degrees, int speed_pulses, int o
     //     {
     //         std::cout << "✅ Target position reached for motors 3." << std::endl;
     //         break;
+    //     }
+    //     else
+    //     {
+    //         // Move motor 3 to rotate the table
+    //         if (motor3.startPosition(pulses, speed_pulses, operation_type).empty())
+    //         {
+    //             std::cerr << "Failed to rotate Motor 3." << std::endl;
+    //             return false;
+    //         }
     //     }
 
     //     std::this_thread::sleep_for(std::chrono::milliseconds(100));
@@ -348,19 +373,6 @@ void goToTable(ModbusAZ &motor1, ModbusAZ &motor2, double distance_mm, int linea
                ModbusAZ &motor3, double angle_degrees, int rotate_speed_pulses, int operation_type)
 {
 
-    // Rotate the table
-    std::cout << "🔄 Rotating table..." << std::endl;
-    bool rotateSuccess = rotateTable(motor3, angle_degrees, rotate_speed_pulses, operation_type);
-    std::cout << "✅ Rotate result: " << rotateSuccess << std::endl;
-    if (!rotateSuccess)
-    {
-        std::cerr << "❌ Error: Failed to rotate the table to " << angle_degrees << " degrees." << std::endl;
-        return;
-    }
-
-    // Wait for a bit to ensure the move is completed
-    std::this_thread::sleep_for(std::chrono::milliseconds(500)); // Increased delay
-
     std::cout << "🟢 Moving table: Distance = " << distance_mm << " mm, Angle = " << angle_degrees << " degrees" << std::endl;
 
     // Move the table
@@ -370,6 +382,19 @@ void goToTable(ModbusAZ &motor1, ModbusAZ &motor2, double distance_mm, int linea
     if (!moveSuccess)
     {
         std::cerr << "❌ Error: Failed to move the table to " << distance_mm << " mm." << std::endl;
+        return;
+    }
+
+    // Wait for a bit to ensure the move is completed
+    std::this_thread::sleep_for(std::chrono::milliseconds(200)); // Increased delay
+
+    // Rotate the table
+    std::cout << "🔄 Rotating table..." << std::endl;
+    bool rotateSuccess = rotateTable(motor3, angle_degrees, rotate_speed_pulses, operation_type);
+    std::cout << "✅ Rotate result: " << rotateSuccess << std::endl;
+    if (!rotateSuccess)
+    {
+        std::cerr << "❌ Error: Failed to rotate the table to " << angle_degrees << " degrees." << std::endl;
         return;
     }
 
@@ -1089,7 +1114,6 @@ void executeSequence(const std::vector<std::function<void()>> &tasks)
 
 int main()
 {
-
     std::thread moving_table_receiver_thread_1(MovingTableReceiver1);
     std::thread moving_table_receiver_thread_2(MovingTableReceiver2);
 
@@ -1112,53 +1136,33 @@ int main()
 
     ////////////////////////////////////// END Moving tables Initialization ////////////////////////////////////////////
 
-    // zmq::context_t context(1);
-    // zmq::socket_t socket(context, ZMQ_SUB);
-    // socket.connect("tcp://192.168.0.10:5555");
-
-    // std::string topic_1 = "P_moving_table_1";
-    // socket.setsockopt(ZMQ_SUBSCRIBE, topic_1.c_str(), topic_1.size());
-
-    // std::string topic_1 = "P_moving_table_1";
-    // socket.setsockopt(ZMQ_SUBSCRIBE, topic_1.c_str(), topic_1.size());
-
-    // double distance_1 = 0.0, speed_1 = 0.0;
-
-    // while (true)
-    // {
-    //     zmq::message_t zmq_message;
-    //     socket.recv(zmq_message, zmq::recv_flags::none);
-    //     std::string message(static_cast<char *>(zmq_message.data()) + topic.size(), zmq_message.size());
-
-    //     std::lock_guard<std::mutex> lock(coord_mutex);
-    //     sscanf(message.c_str(), "%lf %lf", &distance_1, &speed_1, &vision_z_base_l);
-
-    //     std::cout << "P_moving_table_1: Distance" << distance_1 << " speed=" << speed_1 << std::endl;
-    // }
-
     while (true)
     {
         // Wait for a vision update before moving the robot
-        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        std::this_thread::sleep_for(std::chrono::milliseconds(200));
 
+        std::lock_guard<std::mutex> lock(coord_mutex);
+        std::cout << "P_moving_table_1: Distance=" << distance_1 << " speed=" << linear_speed_1 << " rotate=" << rotate_1 << " rotate speed=" << angular_speed_1 << std::endl;
+        std::cout << "P_moving_table_2: Distance=" << distance_2 << " speed=" << linear_speed_2 << " rotate=" << rotate_2 << " rotate speed=" << angular_speed_2 << std::endl;
+
+        // Define movement sequences
+        std::vector<std::vector<std::function<void()>>> sequences = {
+
+            {[&]()
+             { goToTable(motor1, motor2, distance_1, linear_speed_1, motor3, rotate_1, angular_speed_1, 1); },
+             [&]()
+             { goToTable(motor4, motor5, distance_2, linear_speed_2, motor6, rotate_2, angular_speed_2, 1); }},
+        };
+
+        // Execute each sequence step by step
+        for (const auto &sequence : sequences)
         {
-            std::lock_guard<std::mutex> lock(coord_mutex);
-            std::cout << "P_moving_table_1: Distance=" << distance_1 << " speed=" << linear_speed_1 << " rotate=" << rotate_1 << " rotate speed=" << angular_speed_1 << std::endl;
-            std::cout << "P_moving_table_2: Distance=" << distance_2 << " speed=" << linear_speed_2 << " rotate=" << rotate_2 << " rotate speed=" << angular_speed_2 << std::endl;
-
-            goToTable(motor1, motor2, distance_1, linear_speed_1, motor3, rotate_1, angular_speed_1, 1);
-            goToTable(motor4, motor5, distance_2, linear_speed_2, motor6, rotate_2, angular_speed_2, 1);
-
-            // std::thread moving_table_thread_1([&]()
-            //                                   { goToTable(motor1, motor2, distance_1, linear_speed_1, motor3, rotate_1, angular_speed_1, 1); });
-            // std::thread moving_table_thread_2([&]()
-            //                                   { goToTable(motor4, motor5, distance_2, linear_speed_2, motor6, rotate_2, angular_speed_2, 1); });
+            executeSequence(sequence);
         }
 
-        // moving_table_thread_1.join();
-        // moving_table_thread_2.join();
     }
 
+    // Join threads after the loop finishes
     moving_table_receiver_thread_1.join();
     moving_table_receiver_thread_2.join();
 
